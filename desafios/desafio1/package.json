@@ -1,0 +1,13 @@
+{
+  "name": "desafio1",
+  "version": "1.0.0",
+  "description": "Programacion Backend - Comision 55660 - Desafio 1",
+  "main": "ProductManager.js",
+  "scripts": {
+    "test": "node ProductManager_test.js",
+    "test2": "node ProductManager_test_adicional.js"
+  },
+  "author": "Ricardo Losada",
+  "license": "ISC",
+  "type" : "module"
+}
