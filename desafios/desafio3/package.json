@@ -1,0 +1,18 @@
+{
+  "name": "desafio3",
+  "version": "1.0.0",
+  "description": "Programacion Backend - Comision 55660 - Desafio 3",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "type": "module",
+  "author": "Ricardo Losada",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

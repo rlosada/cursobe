@@ -1,0 +1,92 @@
+[
+    {
+        "id" : 1,
+        "title" : "pelota numero 5",
+        "description" : "pelota de futbol de cuero numero 5",
+        "price" : 5000,
+        "code" : "ab45039ze",
+        "stock" : 200,
+        "thumbnail" : "/pelota.jpg"
+    },
+    {
+        "id" : 2,
+        "title" : "botines adidas",
+        "description" : "botines adidas negros talle 43",
+        "price" : 12000,
+        "code" : "3b48639df",
+        "stock" : 60,
+        "thumbnail" : "/botines-adidas.jpg"
+    },
+    {
+        "id" : 3,
+        "title" : "botines puma",
+        "description" : "botines puma blancos talle 40",
+        "price" : 15000,
+        "code" : "2u4s669d9",
+        "stock" : 60,
+        "thumbnail" : "/botines-puma.jpg"
+    },
+    {
+        "id" : 4,
+        "title" : "remera barcelona",
+        "description" : "remera barcelona oficial",
+        "price" : 50000,
+        "code" : "2u4g667d1",
+        "stock" : 70,
+        "thumbnail" : "/remera-barcelona-oficial.jpg"
+    },
+    {
+        "id" : 5,
+        "title" : "remera real madrid",
+        "description" : "remera real madrid oficial",
+        "price" : 52000,
+        "code" : "1usg697d2",
+        "stock" : 90,
+        "thumbnail" : "/remera-real-madrid-oficial.jpg"
+    },
+    {
+        "id" : 6,
+        "title" : "remera inter",
+        "description" : "remera inter oficial",
+        "price" : 58000,
+        "code" : "2usg79791",
+        "stock" : 60,
+        "thumbnail" : "/remera-inter-oficial.jpg"
+    },
+    {
+        "id" : 7,
+        "title" : "remera juventus",
+        "description" : "remera juventus oficial",
+        "price" : 48000,
+        "code" : "7uss7w593",
+        "stock" : 40,
+        "thumbnail" : "/remera-juventus-oficial.jpg"
+    },
+    {
+        "id" : 8,
+        "title" : "remera mc",
+        "description" : "remera machester city oficial",
+        "price" : 41000,
+        "code" : "5uss7g59p",
+        "stock" : 35,
+        "thumbnail" : "/remera-machester-city-oficial.jpg"
+    },
+    {
+        "id" : 9,
+        "title" : "remera psg",
+        "description" : "remera paris saint germain oficial",
+        "price" : 41000,
+        "code" : "dus67g5wq",
+        "stock" : 30,
+        "thumbnail" : "/remeraparis-saint-germain-oficial.jpg"
+    },
+    {
+        "id" : 10,
+        "title" : "remera celtic",
+        "description" : "remera celtic oficial",
+        "price" : 42000,
+        "code" : "eus97g5we",
+        "stock" : 45,
+        "thumbnail" : "/remeraparis-celtic-oficial.jpg"
+    }                                            
+]
