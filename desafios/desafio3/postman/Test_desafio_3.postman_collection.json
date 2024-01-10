@@ -1,0 +1,227 @@
+{
+	"info": {
+		"_postman_id": "8ac7e15f-92fb-4940-a893-a4b7435e8755",
+		"name": "Test desafio3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24298989"
+	},
+	"item": [
+		{
+			"name": "AllProducts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QueryLimit_LT_Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products?limit=5",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QueryLimitNegative",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products?limit=-5",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "-5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QueryLimitNaN",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products?limit=cinco",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "cinco"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QueryLimit_GT_Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products?limit=50",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "50"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QueryLimit_EQ_Zero",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products?limit=0",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QueryProductWithIdValid",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products/2",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products/2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QueryProductWithIdValidOutOfRange",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products/34123123",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products/34123123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QueryProductWithIdNaN",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products/mildoscientos",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products/mildoscientos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QueryProductWithIdNegative",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products/-2",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products/-2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QueryProductWithIdZero",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/products/0",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"products/0"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
