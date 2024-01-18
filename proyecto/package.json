@@ -1,0 +1,16 @@
+{
+  "name": "desafio3",
+  "version": "1.0.0",
+  "description": "Programacion Backend - Comision 55660 - Proyecto Final",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js",
+    "start" : "node app.js"
+  },
+  "type": "module",
+  "author": "Ricardo Losada",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

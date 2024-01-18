@@ -1,0 +1,123 @@
+[
+    {
+    "id": 1,
+    "title": "botines asys",
+    "description": "botines asys blancos talle 40",
+    "price": 15020,
+    "code": "uu4s669ee",
+    "stock": 40,
+    "thumbnails": [
+      "/botines-asys.jpg"
+    ],
+    "status": true
+  },
+    {
+    "id": 2,
+    "title": "botines topper",
+    "description": "botines topper blancos talle 40",
+    "price": 55020,
+    "code": "uu75139ee",
+    "stock": 140,
+    "thumbnails": [
+    ],
+    "status": true
+  },  
+  {
+    "id": 3,
+    "title": "botines puma",
+    "description": "botines puma blancos talle 40",
+    "price": 15000,
+    "code": "2u4s669d9",
+    "stock": 60,
+    "thumbnails": [
+      "/botines-puma.jpg"
+    ],
+    "status": true
+  },
+  {
+    "id": 4,
+    "title": "remera barcelona",
+    "description": "remera barcelona oficial",
+    "price": 50000,
+    "code": "2u4g667d1",
+    "stock": 70,
+    "thumbnails": [
+      "/remera-barcelona-oficial.jpg"
+    ],
+    "status": true
+  },
+  {
+    "id": 5,
+    "title": "remera inter",
+    "description": "remera inter oficial",
+    "price": 58000,
+    "code": "2usg79791",
+    "stock": 60,
+    "thumbnails": [
+      "/remera-inter-oficial.jpg"
+    ],
+    "status": true
+  },
+  {
+    "id": 6,
+    "title": "remera juventus",
+    "description": "remera juventus oficial",
+    "price": 48000,
+    "code": "7uss7w593",
+    "stock": 40,
+    "thumbnails": [
+      "/remera-juventus-oficial.jpg"
+    ],
+    "status": true
+  },
+  {
+    "id": 7,
+    "title": "remera psg",
+    "description": "remera paris saint germain oficial",
+    "price": 41000,
+    "code": "dus67g5wq",
+    "stock": 30,
+    "thumbnails": [
+      "/remeraparis-saint-germain-oficial.jpg"
+    ],
+    "status": true
+  },
+  {
+    "id": 8,
+    "title": "remera celtic",
+    "description": "remera celtic oficial",
+    "price": 42000,
+    "code": "eus97g5we",
+    "stock": 45,
+    "thumbnails": [
+      "/remeraparis-celtic-oficial.jpg"
+    ],
+    "status": true
+  },
+  {
+    "id": 9,
+    "title": "raqueta de tenis",
+    "description": "raqueta de tenis profesional",
+    "code": "AB9000FE45",
+    "price": 200,
+    "status": true,
+    "stock": 50,
+    "thumbnails": [
+      "./raqueta_squash_1024_1280.jpeg",
+      "./raqueta_squash_800_600.jpeg"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "raqueta de squash",
+    "description": "raqueta de tenis profesional (editada)",
+    "code": "AB9000FE45EDITADA",
+    "price": 100,
+    "status": false,
+    "stock": 250,
+    "thumbnails": [
+      "./raqueta_1024_1280_editado.jpeg",
+      "./raqueta_800_600_editado.jpeg"
+    ]
+  }  
+]

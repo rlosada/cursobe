@@ -1,0 +1,57 @@
+[
+    {
+      "id": 1,
+      "productsInfo": [
+        {
+          "pid": 3,
+          "quantity": 502
+        },
+        {
+          "pid": 4,
+          "quantity": 100
+        },
+        {
+          "pid": 6,
+          "quantity": 190
+        },
+        {
+          "pid": 7,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "productsInfo": [
+        {
+          "pid": 2,
+          "quantity": 700
+        },
+        {
+          "pid": 7,
+          "quantity": 105
+        },
+        {
+          "pid": 3,
+          "quantity": 105
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "productsInfo": [
+        {
+          "pid": 2,
+          "quantity": 700
+        },
+        {
+          "pid": 7,
+          "quantity": 105
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "productsInfo": []
+    }
+  ]
