@@ -113,6 +113,8 @@ export default class CartManager {
 
         let cid = await this.#sm.addElement(cart)
         this.#logger.Info('addCart', `New cart added with cid ${cid}`)
+
+        return cid
     }
 
     /**
