@@ -1,5 +1,6 @@
 import { CustomError, CUSTOM_ERROR_TYPES } from "../../misc/customError.js";
 import { SM_ERROR_CODES } from "../../adapters/storage/StorageManagerFile.js";
+import { APP_EVENTS } from "../../adapters/restAPI/public/js/events.js";
 
 // Maxima cantidad de caracteres permitidos para un title
 const MAX_TITLE_SIZE = 32
@@ -76,11 +77,28 @@ export default class ProductManager {
     // Administrador de elementos
     #sm
     #logger
+    #em
+    #name = "ProductManager"
 
-    constructor(storageManager, logger) {
+    constructor(storageManager, logger, eventManager) {
         this.#sm = storageManager
         this.#logger = logger
+        this.#em = eventManager
         this.#logger?.Info('Constructor', `New ProductManager created`)
+        eventManager.registerEvent(this.#name, APP_EVENTS.EV_PROD_LIST_REQ, this.#procProductListRequest.bind(this))
+    }
+
+    #procProductListRequest() {
+        this.#logger?.Info(`${this.#name}|procProductListRequest`, `Processing ${APP_EVENTS.EV_PROD_LIST_REQ}`)   
+        this.getProducts()
+            .then((products) => {
+                this.#em.sendEvent(this.#name, APP_EVENTS.EV_PROD_LIST_RESP, products)
+            })    
+    }
+
+    async #sendProductListUpdate() {
+        let products = await this.getProducts()
+        this.#em.sendEvent(this.#name, APP_EVENTS.EV_PROD_LIST_UPDATE, products)
     }
 
     /**
@@ -123,10 +141,12 @@ export default class ProductManager {
     async addProduct(product) {
         this.#checkProduct(product, true)
         await this.#sm.addElement(product)
+        this.#sendProductListUpdate()
     }
 
     async deleteProduct(id) {
         await this.#sm.deleteElement(id)
+        this.#sendProductListUpdate()
     }
 
     /**

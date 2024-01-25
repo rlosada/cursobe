@@ -9,5 +9,8 @@ export default {
     },    
     httpServer : {
         port : 8080
+    },
+    viewengine : {
+        name : "handlebars"
     }
 }

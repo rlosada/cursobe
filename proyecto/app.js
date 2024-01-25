@@ -2,10 +2,12 @@ import productManager from './application/productManager/ProductManagerInstance.
 import logger from './misc/logger/LoggerInstance.js'
 import createECOMHttpServer from './adapters/restAPI/httpServer.js'
 import cartManager from './application/cartManager/CartManagerInstance.js'
+import eventManager from './application/eventManager/eventManagerInstance.js'
 
 const managers = {
     productManager : productManager,
-    cartManager : cartManager
+    cartManager : cartManager,
+    eventManager : eventManager
 }
 
 const eCOMServer = createECOMHttpServer(managers, logger)

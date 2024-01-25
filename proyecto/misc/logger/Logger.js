@@ -17,7 +17,7 @@ export const LOG_LEVEL = {
 }
 
 
-const MAX_FUNCTION_NAME_SIZE = 32
+const MAX_FUNCTION_NAME_SIZE = 40
 export class Logger {
 
     #logLevel
@@ -67,6 +67,7 @@ export class Logger {
     Debug = (func, msg) => this.log(LOG_LEVEL.LOG_DEBUG, CONSOLE_COLOR.RESET, func, msg) 
     Warn  = (func, msg) => this.log(LOG_LEVEL.LOG_WARN, CONSOLE_COLOR.YELLOW, func, msg) 
     Error = (func, msg) => this.log(LOG_LEVEL.LOG_ERROR, CONSOLE_COLOR.RED, func, msg) 
+    Custom1 = (func, msg) => this.log(LOG_LEVEL.LOG_ERROR, CONSOLE_COLOR.GREEN, func, msg) 
     
     
 }
