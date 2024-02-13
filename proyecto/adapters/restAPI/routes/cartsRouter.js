@@ -5,14 +5,13 @@ let cartManager
 let logger 
 
 const processGetCartById = (req, res, next) => {
-    cartManager.getCartProductsInfo(parseInt(req.params.cid))
+    cartManager.getCartProductsInfo(req.params.cid)
         .then((products) => res.status(HTTP_STATUS_CODES.SUCESS).send({products}))
         .catch(next)
 }
 
 const processPostCartProduct = (req, res, next) => {
-    const cid = parseInt(req.params.cid)
-    const pid = parseInt(req.params.pid)
+    let {cid, pid} = req.params
     cartManager.addCartAddProduct(cid, pid)
          .then(() => res.status(HTTP_STATUS_CODES.CREATED).send())
          .catch(next)

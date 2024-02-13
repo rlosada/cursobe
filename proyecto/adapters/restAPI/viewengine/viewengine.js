@@ -1,7 +1,7 @@
 import registerHandelbarsViewEngine from './handlebars/handlerbars.js'
 import config  from '../../../misc/configuration/configuration.js'
 import { CustomError, CUSTOM_ERROR_TYPES } from '../../../misc/customError.js'
-import getDirectory from '../../../misc/utils.js'
+import {getDirectory} from '../../../misc/utils.js'
 
 
 

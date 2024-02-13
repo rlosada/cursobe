@@ -3,6 +3,7 @@ export const WS_SERVER_EVENTS = {
 }
 
 export const WS_SOCKET_EVENTS = {
-    EV_DATA_IND : 'message'
+    EV_DATA_IND : 'message',
+    EV_DISCONNECT : 'disconnect'
 }
 

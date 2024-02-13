@@ -5,10 +5,11 @@ import createCartRouter from './routes/cartsRouter.js'
 import registerViewEngine from './viewengine/viewengine.js'
 import createHomeRouter from './routes/homeRouter.js'
 import createIndexRouter from './routes/indexRouter.js'
+import createChatRouter from './routes/chat.js.js'
 import createRealTimeProductsRouter from './routes/realTimeProductsRouter.js'
 import { CUSTOM_ERROR_TYPES, CustomError  } from '../../misc/customError.js'
 import { HTTP_STATUS_CODES } from './statusCodes.js'
-import getDirectory from '../../misc/utils.js'
+import {getDirectory} from '../../misc/utils.js'
 import createWebSocketServer from './wsServer.js'
 
 class ECOMMServer {
@@ -46,6 +47,7 @@ class ECOMMServer {
         const PATH_HOME = 'home'  
         const PATH_ROOT = ""
         const PATH_RT_PRODUCTS = "realtimeproducts"
+        const PATH_CHAT = "chat"
     
         const buildRoute = (arr) => "/" + arr.join("/")
     
@@ -54,7 +56,9 @@ class ECOMMServer {
             { route : buildRoute([PATH_API, PATH_CARTS]), router: createCartRouter(this.managers.cartManager, this.logger), name : 'cartManagerRouter'},
             { route : buildRoute([PATH_HOME]), router: createHomeRouter(this.managers.productManager, this.logger), name : 'HomeRouter'},
             { route : buildRoute([PATH_ROOT]), router: createIndexRouter(this.logger), name : 'IndexRouter'},
-            { route : buildRoute([PATH_RT_PRODUCTS]), router: createRealTimeProductsRouter(this.logger), name : 'RealTimeProducts'}
+            { route : buildRoute([PATH_RT_PRODUCTS]), router: createRealTimeProductsRouter(this.logger), name : 'RealTimeProducts'},
+            { route : buildRoute([PATH_CHAT]), router: createChatRouter(this.logger), name : 'Chat'}
+            
         ]
         this.logger.Info('setRoutes', `Registering ${routes.length} routes:`)
         routes.forEach(e => {

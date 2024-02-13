@@ -1,12 +1,10 @@
 import { CustomError, CUSTOM_ERROR_TYPES } from "../../misc/customError.js";
-import { SM_ERROR_CODES } from "../../adapters/storage/StorageManagerFile.js";
+import { SM_ERROR_CODES } from "../../adapters/storage/fs/StorageManagerFile.js";
 import { APP_EVENTS } from "../../adapters/restAPI/public/js/events.js";
 
-// Maxima cantidad de caracteres permitidos para un title
-const MAX_TITLE_SIZE = 32
+import { MAX_TITLE_SIZE, MAX_DESCRIPTION_SIZE} from '../../misc/limits.js'
 
-// Maxima cantidad de caracteres permitidos para un description
-const MAX_DESCRIPTION_SIZE = 60
+
 
 // Codigos de error
 export const PM_ERROR_CODES = Object.freeze({
@@ -104,7 +102,7 @@ export default class ProductManager {
     /**
      * Recupera el producto con el id especificado
      *
-     * @param {number} id Identificador del producto buscado
+     * @param {string} id Identificador del producto buscado
      *
      */
     async getProductById(id) {
@@ -123,12 +121,30 @@ export default class ProductManager {
     }
 
     async getProducts(queryParams) {
+
+        // Verificar los query params
+        if(queryParams) {
+            let {skipCount, maxCount} = queryParams
+            const checkIfIntegerGTZero = (v) => (v != null && !isNaN(v) && Number.isInteger(v) && v >= 0)
+
+            this.#logger.Info('getElements', `Request for elements with parameters skipCount=${skipCount}, maxCount=${maxCount}`)
+
+            if(!checkIfIntegerGTZero(skipCount) || !checkIfIntegerGTZero(maxCount)) 
+                throw createError(CUSTOM_ERROR_TYPES.PARAMETER, SM_ERROR_CODES.ERROR_INVALID_PARAMETERS, `skipCount and maxCount must be integers greater or equal to 0`)
+
+            // Si la cantidad maxima pedida es 0, devolver arreglo vacio
+            if(maxCount == 0)
+                return []        
+        }
+
         let products = await this.#sm.getElements(queryParams)
 
-        // some() aplica la funcion a cada producto del arreglo, si alguno
-        // no es un producto valido se sale con una excepcion. Si en cambio
-        // todos son validos devolver el arreglo
-        products.some(this.#checkProduct)
+        if(products) {
+            // some() aplica la funcion a cada producto del arreglo, si alguno
+            // no es un producto valido se sale con una excepcion. Si en cambio
+            // todos son validos devolver el arreglo
+            products.some(this.#checkProduct)
+        }
 
         return products
     }
@@ -140,8 +156,9 @@ export default class ProductManager {
 
     async addProduct(product) {
         this.#checkProduct(product, true)
-        await this.#sm.addElement(product)
+        let pid = await this.#sm.addElement(product)
         this.#sendProductListUpdate()
+        return pid
     }
 
     async deleteProduct(id) {

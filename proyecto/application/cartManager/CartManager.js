@@ -1,7 +1,7 @@
 import { CustomError, CUSTOM_ERROR_TYPES } from "../../misc/customError.js";
-import { SM_ERROR_CODES } from "../../adapters/storage/StorageManagerFile.js";
+import { SM_ERROR_CODES } from "../../adapters/storage/fs/StorageManagerFile.js";
 import { PM_ERROR_CODES } from "../productManager/ProductManager.js";
-import CartManagerInstance from "./CartManagerInstance.js";
+
 
 // Codigos de error
 export const CM_ERROR_CODES = Object.freeze({
@@ -93,7 +93,6 @@ export default class CartManager {
     }
 
     async addCart(cart) {
-        console.log(cart)
         
         // verificar el formato de lo recibido
         this.#checkcartProdInfo(cart)

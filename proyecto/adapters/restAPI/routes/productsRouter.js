@@ -14,25 +14,25 @@ const processGetAllProducts = (req, res, next) => {
 }
 
 const processGetProductById = (req, res, next) => {
-    productManager.getProductById(parseInt(req.params.id))
+    productManager.getProductById(req.params.id)
         .then((products) => res.status(HTTP_STATUS_CODES.SUCESS).send({products}))
         .catch(next)
 }
 
 const processPostProduct = (req, res, next) => {
     productManager.addProduct(req.body)
-        .then(() => res.status(HTTP_STATUS_CODES.CREATED).send())
+        .then((pid) => res.status(HTTP_STATUS_CODES.CREATED).send({pid : pid}))
         .catch(next)
 }
 
 const processPutProduct = (req, res, next) => {
-    productManager.updateProduct(parseInt(req.params.id), req.body)
+    productManager.updateProduct(req.params.id, req.body)
         .then(() => res.status(HTTP_STATUS_CODES.SUCESS).send())
         .catch(next)
 }
 
 const processDeleteProduct = (req, res, next) => {
-    productManager.deleteProduct(parseInt(req.params.id))
+    productManager.deleteProduct(req.params.id)
         .then(() => res.status(HTTP_STATUS_CODES.SUCESS).send())
         .catch(next)
 }

@@ -1,5 +1,5 @@
 import * as fs from 'node:fs/promises'
-import { CustomError, CUSTOM_ERROR_TYPES } from '../../misc/customError.js'
+import { CustomError, CUSTOM_ERROR_TYPES } from '../../../misc/customError.js'
 
 
 export const SM_ERROR_CODES = Object.freeze({
@@ -165,8 +165,7 @@ export class StorageManagerFile {
     /**
      * Recupera el arreglo de elementos del archivo
      * 
-     * @param {} skipCount numero de elementos a saltear
-     * @param {} maxCount  numero maximo de elementos a devolver
+     * @param {} queryParams Objeto con parametros validados
      * 
      * @returns Arreglo de elementos s/id
      */
@@ -177,17 +176,6 @@ export class StorageManagerFile {
         if(queryParams != null) {
 
             let { skipCount, maxCount } = queryParams
-
-            const checkIfIntegerGTZero = (v) => (v != null && !isNaN(v) && Number.isInteger(v) && v >= 0)
-
-            this.#logger.Info('getElements', `Request for elements with parameters skipCount=${skipCount}, maxCount=${maxCount}`)
-
-            if(!checkIfIntegerGTZero(skipCount) || !checkIfIntegerGTZero(maxCount)) 
-                throw createError(SM_ERROR_CODES.ERROR_INVALID_PARAMETERS, `skipCount and maxCount must be integers greater or equal to 0`)
-
-            // Si la cantidad maxima pedida es 0, devolver arreglo vacio
-            if(maxCount == 0)
-                return []
 
             elementssWithId = await this.#loadFromFile()
             
