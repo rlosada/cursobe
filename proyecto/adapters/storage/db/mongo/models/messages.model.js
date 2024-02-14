@@ -4,11 +4,9 @@ import { messagesCollectionName, messagesSchema } from '../schemas/messages.sche
 let messagesManagerModel = null
 
 // Crea o devuelve un modelo de la coleccion Messages a partir del schema importado
-const getProductMongoModel = () => { 
+export const getMessagesMongoModel = () => { 
     if(messagesManagerModel === null)
-    messagesManagerModel = model(messagesCollectionName, messagesSchema)
+        messagesManagerModel = model(messagesCollectionName, messagesSchema)
     return messagesManagerModel
 }
 
-// Exportar objeto getMessagesMongoModel
-export default getMessagesMongoModel

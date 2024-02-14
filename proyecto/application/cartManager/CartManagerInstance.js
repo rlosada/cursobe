@@ -1,7 +1,7 @@
 import logger from '../../misc/logger/LoggerInstance.js'
 import smCarts from '../../adapters/storage/fs/StorageCartInstance.js'
 import productManager from '../productManager/ProductManagerInstance.js'
-import CartManager  from './CartManager.js'
+import CartManager  from './CartManagerFs.js'
 import configuration from '../../misc/configuration/configuration.js'
 import getCartMongoModel from '../../adapters/storage/db/mongo/models/carts.model.js'
 
@@ -16,7 +16,7 @@ async function getCartManager() {
 
 async function createCartManager() {
     const dataSources = [
-        {source : "fs", codeCartManager : "./CartManager.js", build: (constructor) => new constructor(smCarts, productManager, logger) } ,
+        {source : "fs", codeCartManager : "./CartManagerFs.js", build: (constructor) => new constructor(smCarts, productManager, logger) } ,
         {source : "db", codeCartManager : "./CartManagerMongo.js", build : (constructor) => new constructor(getCartMongoModel(), logger)}         
     ]
 

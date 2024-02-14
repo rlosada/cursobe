@@ -4,6 +4,7 @@ import createECOMHttpServer from './adapters/restAPI/httpServer.js'
 import getCartManager from './application/cartManager/CartManagerInstance.js'
 import eventManager from './application/eventManager/eventManagerInstance.js'
 import connectToMongoDb from './adapters/storage/db/mongo/mongo.js'
+import getChatManager from './adapters/restAPI/public/js/chatManager/chatManagerInstance.js'
 
 async function init() {
     let rc = await connectToMongoDb()
@@ -19,6 +20,10 @@ async function run() {
         cartManager : cartManager,
         eventManager : eventManager
     }
+
+    const ChatApp = getChatManager()
+
+    ChatApp.start()
 
     const eCOMServer = createECOMHttpServer(managers, logger)
     eCOMServer.startServer()

@@ -4,8 +4,8 @@
   "description": "Programacion Backend - Comision 55660 - Proyecto Final",
   "main": "app.js",
   "scripts": {
-    "test": "node app2.js",
-    "start": "node app2.js"
+    "test": "node app.js",
+    "start": "node app.js"
   },
   "type": "module",
   "author": "Ricardo Losada",

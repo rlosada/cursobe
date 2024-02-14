@@ -1,4 +1,4 @@
-import { MESSAGE_MAX_SIZE, MESSAGE_MIN_SIZE } from "../../../../../misc/limits";
+import { MESSAGE_MAX_SIZE, MESSAGE_MIN_SIZE } from "../../../../../misc/limits.js";
 import { Schema } from "mongoose";
 
 export const messagesSchema = new Schema({
