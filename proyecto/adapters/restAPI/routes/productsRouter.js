@@ -6,10 +6,16 @@ let logger
 
 const processGetAllProducts = (req, res, next) => {
 
-    let queryParams = (req.query.limit) ? { skipCount : 0 /* No usado */, maxCount : parseInt(req.query.limit)} : undefined
-
-    productManager.getProducts(queryParams)
-        .then((products) => res.status(HTTP_STATUS_CODES.SUCESS).send({products}))
+    productManager.getProducts(req.query)
+        .then((products) => {
+            // 
+            let response = {
+                products,
+                prevLink : "",
+                nextLink : ""
+            }
+            res.status(HTTP_STATUS_CODES.SUCESS).send({response})
+    })
         .catch(next)
 }
 

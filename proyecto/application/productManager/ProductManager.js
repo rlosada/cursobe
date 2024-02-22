@@ -1,7 +1,7 @@
 import { CustomError, CUSTOM_ERROR_TYPES } from "../../misc/customError.js";
 import { SM_ERROR_CODES } from "../../adapters/storage/fs/StorageManagerFile.js";
 import { APP_EVENTS } from "../../adapters/restAPI/public/js/events.js";
-
+import adjustQueryParams from "./ProductManagerQueryParams.js";
 import { MAX_TITLE_SIZE, MAX_DESCRIPTION_SIZE} from '../../misc/limits.js'
 
 
@@ -120,30 +120,17 @@ export default class ProductManager {
         return product
     }
 
+
+
     async getProducts(queryParams) {
 
-        // Verificar los query params
-        if(queryParams) {
-            let {skipCount, maxCount} = queryParams
-            const checkIfIntegerGTZero = (v) => (v != null && !isNaN(v) && Number.isInteger(v) && v >= 0)
-
-            this.#logger.Info('getElements', `Request for elements with parameters skipCount=${skipCount}, maxCount=${maxCount}`)
-
-            if(!checkIfIntegerGTZero(skipCount) || !checkIfIntegerGTZero(maxCount)) 
-                throw createError(CUSTOM_ERROR_TYPES.PARAMETER, SM_ERROR_CODES.ERROR_INVALID_PARAMETERS, `skipCount and maxCount must be integers greater or equal to 0`)
-
-            // Si la cantidad maxima pedida es 0, devolver arreglo vacio
-            if(maxCount == 0)
-                return []        
-        }
-
-        let products = await this.#sm.getElements(queryParams)
+        let products = await this.#sm.getElements(adjustQueryParams(queryParams))
 
         if(products) {
             // some() aplica la funcion a cada producto del arreglo, si alguno
             // no es un producto valido se sale con una excepcion. Si en cambio
             // todos son validos devolver el arreglo
-            products.some(this.#checkProduct)
+            products.payload.some(this.#checkProduct.bind(this))
         }
 
         return products
@@ -228,12 +215,16 @@ export default class ProductManager {
         // Depende de donde viene el producto (del usuario o el storage) el tipo de error es diferente
         let error_type = (input) ? CUSTOM_ERROR_TYPES.PARAMETER : CUSTOM_ERROR_TYPES.INTERNAL
 
-        if(product === undefined || product === null) 
+        if(product === undefined || product === null) {
+            this.#logger?.Error('checkProduct', `Product is undefined or null`)
             throw createError(error_type, PM_ERROR_CODES.ERROR_UNDEFINED_OR_NULL)
+        }
         
         for(const check of checks) {
-            if (!check.func(product[check.field])) 
+            if (!check.func(product[check.field])) {
+                this.#logger?.Error('checkProduct', `Product ${JSON.stringify(product)} field ${check.field} validation failed`)
                 throw createError(error_type, check.ret_when_fail)
+            }
         }
 
         return

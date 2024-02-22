@@ -26,6 +26,18 @@ export const validatePort = (port) => {
         return false
 }
 
+export const validatePositiveIntBase10 = (value) => {
+    
+    let v = Number.parseInt(value)
+    
+    if(Number.isNaN(v))
+        return false
+
+    if(v < 0)
+        return false
+
+    return true
+} 
 
 
 

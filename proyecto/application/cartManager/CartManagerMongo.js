@@ -1,6 +1,7 @@
 import { CustomError, CUSTOM_ERROR_TYPES } from "../../misc/customError.js";
 import { SM_ERROR_CODES } from "../../adapters/storage/fs/StorageManagerFile.js";
 import mongoose from "mongoose";
+import {validatePositiveIntBase10} from '../../misc/utils.js'
 
 // Codigos de error
 export const CM_ERROR_CODES = Object.freeze({
@@ -73,13 +74,20 @@ export default class CartManager {
         if(cart === null) 
             throw createError(CM_ERROR_CODES.ERROR_CART_NOT_FOUND, `cart ${cid} was not found on storage`)
 
-        // Generar un arreglo de productos y a cada uno agregarle el campo quantity    
-        let products = cart.productsInfo.map(pi => { 
+        // Generar un arreglo de productos y a cada uno agregarle el campo quantity. Es posible que el producto
+        // referenciado en el carrito no exista mas y por lo tanto es por eso que si eso sucede pi.pid no existe
+        // dicho producto no se agrega al array. En ese caso habria que eliminarlo del carrito
+        let products = []
+        cart.productsInfo.forEach( pi => { 
             let { quantity } = pi
-            let {_id, __v, ...product}   = pi.pid
-
-            return { quantity: pi.quantity , ...product} })
+            if(pi.pid) {
+                let {_id, __v, ...product}   = pi.pid
+                products.push({ quantity: pi.quantity , ...product}) 
+            }
+        })
         
+        console.log(JSON.stringify(products))
+
         return products
     }
 
@@ -96,6 +104,37 @@ export default class CartManager {
 
         return _id.toString()
     }
+
+
+    async cartRmvProduct(cid, pid) {
+        const collection = this.#model
+        const logger = this.#logger
+        logger.Info(`${this.constructor.name}|cartRmvProduct`, `Trying to remove product ${pid} from cart ${cid}`)
+        try {
+            await collection.updateOne(
+                { _id : cid },
+                { $pull : { productsInfo : { pid : pid } } }
+        )
+        } catch(err) {
+            logger.Error(`${this.constructor.name}|cartRmvProduct`, `Fail to remove item from cart, error=${err}`)
+            throw createError(CM_ERROR_CODES.ERROR_CART_INTERNAL_ERROR)
+        }
+    }
+
+    async cartEmpty(cid, pid) {
+        const collection = this.#model
+        const logger = this.#logger
+        logger.Info(`${this.constructor.name}|cartEmpty`, `Trying to empty cart ${cid}`)
+        try {
+            await collection.updateOne(
+                { _id : cid },
+                { $unset : { productsInfo : "" } }
+        )
+        } catch(err) {
+            logger.Error(`${this.constructor.name}|cartEmpty`, `Fail to empty cart, error=${err}`)
+            throw createError(CM_ERROR_CODES.ERROR_CART_INTERNAL_ERROR)
+        }
+    }    
 
     /**
      * Agrega un nuevo producto al carrito
@@ -136,6 +175,34 @@ export default class CartManager {
         await collection.updateOne({_id : cid}, cart)
 
         return 
+    }
+
+    /**
+     * Modifica la cantidad de productos de un carrito
+     * @param {number} cid  Identificador del carrito
+     * @param {number} pid  Identificador del producto
+     * @param {number} quantity Nueva cantidad del producto
+     */
+    async cartUpProductQty(cid, pid, quantity) {
+        const collection = this.#model
+        const logger = this.#logger
+
+        
+        if(!validatePositiveIntBase10(quantity))
+            throw createError(ERROR_CART_INVALID_PRODUCTS_QUANTITY, `quantity of ${quantity} is not a positive integer value`)
+        
+        let nquantity = Number.parseInt(quantity)
+
+        try {            
+            await collection.updateOne(
+                { _id : cid },
+                { $set : { "productsInfo.$[elem].quantity" :  nquantity} },
+                { arrayFilters : [ { "elem.pid" : pid } ]}
+            )
+        } catch(err) {
+            logger.Error(`${this.constructor.name}|cartUpProductQty`, `Fail to update quantity to ${nquantity} for product ${pid} in cart ${cid}, error=${err}`)
+            throw createError(CM_ERROR_CODES.ERROR_CART_INTERNAL_ERROR)
+        }
     }
 
     /**

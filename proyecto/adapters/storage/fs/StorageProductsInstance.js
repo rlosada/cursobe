@@ -2,7 +2,7 @@ import { StorageManagerFile } from "./StorageManagerFile.js";
 import globalConfiguration from '../../../misc/configuration/configuration.js'
 import logger  from '../../../misc/logger/LoggerInstance.js'
 
-const config = globalConfiguration.products
+const config = globalConfiguration.fs.products
 
 let sm = null
 

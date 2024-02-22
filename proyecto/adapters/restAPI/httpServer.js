@@ -7,6 +7,8 @@ import createHomeRouter from './routes/homeRouter.js'
 import createIndexRouter from './routes/indexRouter.js'
 import createChatRouter from './routes/chat.js.js'
 import createRealTimeProductsRouter from './routes/realTimeProductsRouter.js'
+import createProductsViewRouter from './routes/productsView.js'
+import createCartProductsInfoViewRouter from './routes/cartContentView.js'
 import { CUSTOM_ERROR_TYPES, CustomError  } from '../../misc/customError.js'
 import { HTTP_STATUS_CODES } from './statusCodes.js'
 import {getDirectory} from '../../misc/utils.js'
@@ -52,12 +54,17 @@ class ECOMMServer {
         const buildRoute = (arr) => "/" + arr.join("/")
     
         const routes = [
+            // API
             { route : buildRoute([PATH_API, PATH_PRODUCTS]), router: createProductsRouter(this.managers.productManager, this.logger), name: 'productManagerRouter'},
             { route : buildRoute([PATH_API, PATH_CARTS]), router: createCartRouter(this.managers.cartManager, this.logger), name : 'cartManagerRouter'},
+            // VIEWS
             { route : buildRoute([PATH_HOME]), router: createHomeRouter(this.managers.productManager, this.logger), name : 'HomeRouter'},
             { route : buildRoute([PATH_ROOT]), router: createIndexRouter(this.logger), name : 'IndexRouter'},
             { route : buildRoute([PATH_RT_PRODUCTS]), router: createRealTimeProductsRouter(this.logger), name : 'RealTimeProducts'},
-            { route : buildRoute([PATH_CHAT]), router: createChatRouter(this.logger), name : 'Chat'}
+            { route : buildRoute([PATH_CHAT]), router: createChatRouter(this.logger), name : 'Chat'},
+            { route : buildRoute([PATH_PRODUCTS]), router: createProductsViewRouter(this.managers.productManager, this.logger), name : 'ProductsView'},
+            { route : buildRoute([PATH_CARTS]), router: createCartProductsInfoViewRouter(this.managers.cartManager, this.logger), name : 'CartProductsView'},
+            
             
         ]
         this.logger.Info('setRoutes', `Registering ${routes.length} routes:`)

@@ -1,5 +1,6 @@
 import { MAX_DESCRIPTION_SIZE, MAX_TITLE_SIZE } from "../../../../../misc/limits.js"
 import { Schema } from "mongoose";
+import mongoosePaginate from 'mongoose-paginate-v2'
 
 export const productsSchema = new Schema( 
     {
@@ -13,5 +14,8 @@ export const productsSchema = new Schema(
         thumbnails :    { type : [ String ]                                                 }   
     }
 )
+
+// Agregar plugin de paginacion
+productsSchema.plugin(mongoosePaginate)
 
 export const productCollectionName = 'Products'

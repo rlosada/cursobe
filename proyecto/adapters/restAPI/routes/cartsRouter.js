@@ -17,6 +17,28 @@ const processPostCartProduct = (req, res, next) => {
          .catch(next)
 }
 
+const processSetProductQty = (req, res, next) => {
+    let {cid, pid} = req.params
+    let { quantity } = req.body
+    cartManager.cartUpProductQty(cid, pid, quantity)
+         .then(() => res.status(HTTP_STATUS_CODES.SUCESS).send())
+         .catch(next)
+}
+
+const processDeleteCartProduct = (req, res, next) => {
+    let {cid, pid} = req.params
+    cartManager.cartRmvProduct(cid, pid)
+         .then(() => res.status(HTTP_STATUS_CODES.SUCESS).send())
+         .catch(next)
+}
+
+const processEmptyCart = (req, res, next) => {
+    let {cid, pid} = req.params
+    cartManager.cartEmpty(cid, pid)
+         .then(() => res.status(HTTP_STATUS_CODES.SUCESS).send())
+         .catch(next)
+}
+
 const processPostCart = (req, res, next) => {
     cartManager.addCart(req.body)
          .then((cid) => res.status(HTTP_STATUS_CODES.CREATED).send({"cid" : cid}))
@@ -36,6 +58,12 @@ const createCartRouter = (cm, lg) => {
     // POST
     router.post('/:cid/product/:pid', processPostCartProduct)  
     router.post('/', processPostCart)  
+    // DELETE
+    router.delete('/:cid/product/:pid', processDeleteCartProduct)  
+    router.delete('/:cid', processEmptyCart)  
+    // PUT
+    router.put('/:cid/product/:pid', processSetProductQty)
+    
 
     return router    
 }

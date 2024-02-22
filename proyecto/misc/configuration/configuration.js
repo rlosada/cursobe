@@ -1,19 +1,27 @@
 export default {
     dataSource : "db",
     db : {
-        user : "usermongo",
-        pass : "passmongo",
+        user : "",
+        pass : "",
         dbname : "ecommerce",
         server : "cluster0.wtewrgc.mongodb.net"
     },
-    products : {
-        path : './data/',
-        filename : 'productos.json'
+    fs : { 
+        products : {
+            path : './data/',
+            filename : 'productos.json'
+        },
+        carts : {
+            path : './data/',
+            filename : 'carrito.json'
+        },    
     },
-    carts : {
-        path : './data/',
-        filename : 'carrito.json'
-    },    
+    queries : {
+        products : {
+            limit : 10,
+            page: 1
+        }
+    },
     httpServer : {
         port : 8080
     },

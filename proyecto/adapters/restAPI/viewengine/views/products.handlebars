@@ -1,0 +1,57 @@
+<div>
+    <table>
+        <tr>
+            <th>id</th>
+            <th>title</th>
+            <th>description</th>
+            <th>price</th>
+            <th>code</th>
+            <th>stock</th>
+            <th>thumbnails</th>
+            <th>status</th>
+            <th>category</th>
+        </tr>
+        {{#each payload}}
+        <tr>
+            <td>{{_id}}</td>
+            <td>{{title}}</td>
+            <td>{{description}}</td>
+            <td>{{price}}</td>
+            <td>{{code}}</td>
+            <td>{{stock}}</td>
+            <td>{{thumbnails}}</td>
+            <td>{{status}}</td>
+            <td>{{category}}</td>     
+        </tr>
+        {{/each }}
+    </table>
+    <table>
+        <th>
+            {{#if hasPrevPage}}
+                <a href="http://">Prev</a>
+            {{else}}
+                <div></div>
+            {{/if}}                
+        </th>
+        <th>{{page}}/{{totalPages}}</th>
+        <th>
+            {{#if hasNextPage}}
+                <a href="http://">Next</a>
+            {{else}}
+                <div></div>
+            {{/if}}    
+        </th>            
+    </table>
+
+    <form id="FormAddProduct2Cart" action="" method="post">
+        <label for="cid">Cart ID:</label><br>
+        <input type="text" id="cid" name="cart ID" pattern="[A-Za-z0-9]+" required><br><br>
+        
+        <label for="pid">Product Index</label><br>
+        <input type="text" id="pid" name="Product ID" pattern="[A-Za-z0-9]+" required><br><br>
+        
+        <input type="submit" value="Agregar al carrito">
+    </form>    
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="/js/products.js" type="module"></script>
+</div>
