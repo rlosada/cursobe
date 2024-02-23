@@ -45,6 +45,14 @@ const processPostCart = (req, res, next) => {
          .catch(next)
 }
 
+const processUpdateCart = (req, res, next) => {
+        let {cid} = req.params
+        let productsInfo = req.body
+        cartManager.updateCart(cid, productsInfo)
+            .then(() => res.status(HTTP_STATUS_CODES.SUCESS).send())
+            .catch(next)        
+}
+
 const createCartRouter = (cm, lg) => {
     cartManager = cm
     logger = lg
@@ -63,7 +71,7 @@ const createCartRouter = (cm, lg) => {
     router.delete('/:cid', processEmptyCart)  
     // PUT
     router.put('/:cid/product/:pid', processSetProductQty)
-    
+    router.put('/:cid', processUpdateCart)
 
     return router    
 }

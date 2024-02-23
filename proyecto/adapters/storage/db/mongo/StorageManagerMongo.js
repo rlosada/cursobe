@@ -165,6 +165,22 @@ export class StorageManagerMongo {
     #buildGetElementsResult(dbResult, filter, options) {
         if(dbResult === undefined) 
             return { status: "error" }
+
+        const buildLink = (filter, options, page) => {
+            let link  
+
+            link =  `?limit=${options.limit}&page=${page}`
+            if(options.sort?.price) {
+                link = link.concat(`&sort=${options.sort.price}`)
+            }
+            let query = ''
+            if(filter?.category) 
+                query =    query.concat(`category=${filter.category}`)                 
+            if(filter?.stock)  
+                query =    query.concat(`stock=true`)                 
+
+            return link
+        }
     
         let result = {
             status: "success",
@@ -179,7 +195,12 @@ export class StorageManagerMongo {
             page: dbResult.page,
             hasPrevPage : dbResult.hasPrevPage,
             hasNextPage : dbResult.hasNextPage,
+            prevLink : (dbResult.hasPrevPage) ? buildLink(filter, options, dbResult.prevPage) : undefined, 
+            nextLink : (dbResult.hasNextPage) ? buildLink(filter, options, dbResult.nextPage) : undefined, 
         }
+
+        console.log(JSON.stringify(result.prevLink))
+        console.log(JSON.stringify(result.nextLink))
 
         return result
     }

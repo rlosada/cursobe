@@ -27,8 +27,8 @@ export default function adjustQueryParams(queryParams) {
         let { limit, page, sort } = queryParams
         let filter = queryParams.query
 
-        if(validatePositiveIntBase10(limit)) adjustedQueryParams.limit = number.parseInt(limit)
-        if(validatePositiveIntBase10(page)) adjustedQueryParams.page = number.parseInt(page)
+        if(validatePositiveIntBase10(limit)) adjustedQueryParams.limit = Number.parseInt(limit)
+        if(validatePositiveIntBase10(page)) adjustedQueryParams.page = Number.parseInt(page)
 
         if(sort && typeof sort === 'string') {
             if(sort.toLocaleLowerCase() === SORT_ORDER_ASC) 

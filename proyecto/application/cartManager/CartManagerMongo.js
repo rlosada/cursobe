@@ -91,6 +91,38 @@ export default class CartManager {
         return products
     }
 
+    async updateCart(cid, productsInfo) {
+        const collection = this.#model
+
+        // verificar el formato de lo recibido
+        this.#checkcartProdInfo(productsInfo)
+
+        let cart 
+        try {
+            cart = await collection.findOne({ _id : cid })
+        } catch(err) {
+            logger.Error(`${this.constructor.name}|addCartAddProduct`, `Fail to get cart from database, error=${err}`)
+            throw createError(CM_ERROR_CODES.ERROR_CART_INTERNAL_ERROR)
+        }        
+
+        this.#logger.Info(`${this.constructor.name}|updateCart`, 'Processing update cart request')        
+
+        // Limpiar el arreglo
+        cart.productsInfo = []
+
+        console.log(typeof productsInfo)
+
+        // Cargar los nuevos valores
+        productsInfo.productsInfo.forEach( v => cart.productsInfo.push( v ))
+        
+        await collection.updateOne({_id : cid}, cart)
+
+
+        return
+    }
+
+
+
     async addCart(cart) {
         const collection = this.#model
 
@@ -111,10 +143,21 @@ export default class CartManager {
         const logger = this.#logger
         logger.Info(`${this.constructor.name}|cartRmvProduct`, `Trying to remove product ${pid} from cart ${cid}`)
         try {
-            await collection.updateOne(
+           let result =  await collection.updateOne(
                 { _id : cid },
                 { $pull : { productsInfo : { pid : pid } } }
-        )
+            )
+
+            // Determinar que sucedio
+            let { matchedCount, modifiedCount} = result
+            
+            // No se econtro el carrito
+            if(!matchedCount) 
+                throw createError(CM_ERROR_CODES.ERROR_CART_NOT_FOUND, `cart ${cid} was not found on storage`)
+            // No se econtro el carrito
+            if(!modifiedCount)
+                throw createError(CM_ERROR_CODES.ERROR_CART_PRODUCT_NOT_FOUND, `pid ${pid} not found inside cart ${cid} on storage`)
+       
         } catch(err) {
             logger.Error(`${this.constructor.name}|cartRmvProduct`, `Fail to remove item from cart, error=${err}`)
             throw createError(CM_ERROR_CODES.ERROR_CART_INTERNAL_ERROR)
@@ -124,12 +167,24 @@ export default class CartManager {
     async cartEmpty(cid, pid) {
         const collection = this.#model
         const logger = this.#logger
+       
         logger.Info(`${this.constructor.name}|cartEmpty`, `Trying to empty cart ${cid}`)
+
         try {
-            await collection.updateOne(
+            let result = await collection.updateOne(
                 { _id : cid },
                 { $unset : { productsInfo : "" } }
-        )
+            )
+
+            // Determinar que sucedio
+            let { matchedCount } = result
+            
+            // No se econtro el carrito
+            if(!matchedCount) 
+                throw createError(CM_ERROR_CODES.ERROR_CART_NOT_FOUND, `cart ${cid} was not found on storage`)
+
+            // Si ya estaba vacio, considerar OK
+
         } catch(err) {
             logger.Error(`${this.constructor.name}|cartEmpty`, `Fail to empty cart, error=${err}`)
             throw createError(CM_ERROR_CODES.ERROR_CART_INTERNAL_ERROR)
@@ -187,18 +242,31 @@ export default class CartManager {
         const collection = this.#model
         const logger = this.#logger
 
-        
+       
         if(!validatePositiveIntBase10(quantity))
             throw createError(ERROR_CART_INVALID_PRODUCTS_QUANTITY, `quantity of ${quantity} is not a positive integer value`)
         
         let nquantity = Number.parseInt(quantity)
 
+        logger.Info(`${this.constructor.name}|cartUpProductQty`, `Trying to modify quantity to ${nquantity} of product ${pid} in cart ${cid}`)
+
         try {            
-            await collection.updateOne(
+            let result = await collection.updateOne(
                 { _id : cid },
                 { $set : { "productsInfo.$[elem].quantity" :  nquantity} },
                 { arrayFilters : [ { "elem.pid" : pid } ]}
             )
+
+            // Determinar que sucedio
+            let { matchedCount, modifiedCount} = result
+            
+            // No se econtro el carrito
+            if(!matchedCount) 
+                throw createError(CM_ERROR_CODES.ERROR_CART_NOT_FOUND, `cart ${cid} was not found on storage`)
+            // No se econtro el carrito
+            if(!modifiedCount)
+                throw createError(CM_ERROR_CODES.ERROR_CART_PRODUCT_NOT_FOUND, `pid ${pid} not found inside cart ${cid} on storage`)
+
         } catch(err) {
             logger.Error(`${this.constructor.name}|cartUpProductQty`, `Fail to update quantity to ${nquantity} for product ${pid} in cart ${cid}, error=${err}`)
             throw createError(CM_ERROR_CODES.ERROR_CART_INTERNAL_ERROR)

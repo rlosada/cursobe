@@ -28,7 +28,7 @@
     <table>
         <th>
             {{#if hasPrevPage}}
-                <a href="http://">Prev</a>
+                <a href={{prevLink}}>Prev</a>
             {{else}}
                 <div></div>
             {{/if}}                
@@ -36,7 +36,7 @@
         <th>{{page}}/{{totalPages}}</th>
         <th>
             {{#if hasNextPage}}
-                <a href="http://">Next</a>
+                <a href={{nextLink}}>Next</a>
             {{else}}
                 <div></div>
             {{/if}}    
@@ -47,7 +47,7 @@
         <label for="cid">Cart ID:</label><br>
         <input type="text" id="cid" name="cart ID" pattern="[A-Za-z0-9]+" required><br><br>
         
-        <label for="pid">Product Index</label><br>
+        <label for="pid">Product ID</label><br>
         <input type="text" id="pid" name="Product ID" pattern="[A-Za-z0-9]+" required><br><br>
         
         <input type="submit" value="Agregar al carrito">
