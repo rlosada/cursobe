@@ -1,6 +1,7 @@
 import { fileURLToPath }  from 'url'
 import { dirname } from 'path'
-
+import crypto from 'node:crypto'
+import { USER_TYPES } from './constants.js'
 
 /**
  * Recupera el path completo del directorio donde reside el modulo
@@ -39,5 +40,24 @@ export const validatePositiveIntBase10 = (value) => {
     return true
 } 
 
+export const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
 
+export const validateUserType = (type) => {
+    let keys = Object.values(USER_TYPES)
+    return keys.includes(type)
+}
 
+/**
+ * Devuelve el SHA256 del valor recibido
+ * 
+ * @param {string} value 
+ */
+export function getHash(value) {
+    const HASH_ALGO = 'sha256'
+    const OUTPUT_FORMAT = 'hex'
+    return crypto.createHash(HASH_ALGO)
+            .update(value)
+            .digest(OUTPUT_FORMAT)
+}

@@ -5,7 +5,8 @@ let productManager
 function processGetProductsView(req, res, next) {
     productManager.getProducts(req.query)         
         .then((result) => { 
-                            let data = { title:'products', ...result}; 
+                            let user = req.session.user
+                            let data = { title:'products', userFullName : `${user.firstName} ${user.lastName}`, isAdmin : user.isAdmin, ...result}; 
                             res.render('products', data)
         })
         .catch(next)

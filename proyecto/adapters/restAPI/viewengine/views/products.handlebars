@@ -1,4 +1,6 @@
 <div>
+    <h1>Logged User: {{ userFullName }} {{#if isAdmin}} (Admin) {{/if}}</h1>
+
     <table>
         <tr>
             <th>id</th>
@@ -52,6 +54,9 @@
         
         <input type="submit" value="Agregar al carrito">
     </form>    
+
+    <button id="LogoutButtonID">Logout</button>
+
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
     <script src="/js/products.js" type="module"></script>
 </div>

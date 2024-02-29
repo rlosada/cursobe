@@ -1,0 +1,25 @@
+<div>
+    <h1>Register</h1>
+
+    <form id="RegisterForm" action="" method="post">
+        
+        <label for="firstNameID">First Name:</label><br>
+        <input type="text" id="firstNameID" name="firstName" required><br><br>
+
+        <label for="lastNameID">Last Name:</label><br>
+        <input type="text" id="lastNameID" name="lastName" required><br><br>        
+
+        <label for="emailID">Email:</label><br>
+        <input type="email" id="emailID" name="email" required><br><br>        
+
+        <label for="ageID">Age:</label><br>
+        <input type="number" id="ageID" name="age" required min="1" max="120"><br><br>
+        
+        <label for="passwordID">Password:</label><br>
+        <input type="password" id="passwordID" name="password" required><br><br>
+        
+        <input type="submit" value="Register">
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="/js/register.js" type="module"></script>    
+</div>

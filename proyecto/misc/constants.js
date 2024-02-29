@@ -7,3 +7,15 @@ export const MAX_DESCRIPTION_SIZE = 60  // Maxima cantidad de caracteres permiti
 
 export const MESSAGE_MIN_SIZE = 1       // Minima cantidad de caracteres que puede tener un mensaje a ser almacenado en la coleccion Messages
 export const MESSAGE_MAX_SIZE = 256     // Maxima cantidad de caracteres que puede tener un mensaje a ser almacenado en la coleccion Messages
+
+export const MAX_USER_FIRST_NAME = 64
+export const MAX_USER_LAST_NAME = 64
+export const MAX_USER_EMAIL = 64
+
+
+// Tipos de usuarios permitidos
+export const USER_TYPES = {
+    ADMIN :  'ADMIN_USER', 
+    SIMPLE :'USUARIO' 
+}
+

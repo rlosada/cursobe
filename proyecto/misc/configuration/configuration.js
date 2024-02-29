@@ -1,8 +1,8 @@
 export default {
     dataSource : "db",
     db : {
-        user : "",
-        pass : "",
+        user : "usermongo",
+        pass : "mongo938",
         dbname : "ecommerce",
         server : "cluster0.wtewrgc.mongodb.net"
     },
@@ -23,7 +23,8 @@ export default {
         }
     },
     httpServer : {
-        port : 8080
+        port : 8080,
+        sessionSecret : '123456'
     },
     viewengine : {
         name : "handlebars"

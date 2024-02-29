@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { HTTP_STATUS_CODES } from '../statusCodes.js'
+import { HTTP_STATUS_CODES } from '../public/js/statusCodes.js'
 
 let cartManager
 let logger 

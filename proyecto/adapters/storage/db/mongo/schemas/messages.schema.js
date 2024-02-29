@@ -1,14 +1,13 @@
-import { MESSAGE_MAX_SIZE, MESSAGE_MIN_SIZE } from "../../../../../misc/limits.js";
+import { MESSAGE_MAX_SIZE, MESSAGE_MIN_SIZE } from "../../../../../misc/constants.js";
 import { Schema } from "mongoose";
+import { validateEmail } from "../../../../../misc/utils.js";
 
 export const messagesSchema = new Schema({
     email: {
       type: String,
       required: true,
       validate: {
-        validator: function (value) {
-          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-        },
+        validator: validateEmail,
         message: 'Invalid email address format',
       },
     },

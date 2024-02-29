@@ -1,5 +1,6 @@
 import globalConfiguration from '../../misc/configuration/configuration.js'
 import express from 'express'
+import createLoginRouter from './routes/loginRouter.js'
 import createProductsRouter from './routes/productsRouter.js'
 import createCartRouter from './routes/cartsRouter.js'
 import registerViewEngine from './viewengine/viewengine.js'
@@ -7,12 +8,20 @@ import createHomeRouter from './routes/homeRouter.js'
 import createIndexRouter from './routes/indexRouter.js'
 import createChatRouter from './routes/chat.js.js'
 import createRealTimeProductsRouter from './routes/realTimeProductsRouter.js'
+import createRegisterRouter from './routes/registerRouter.js'
+
 import createProductsViewRouter from './routes/productsView.js'
 import createCartProductsInfoViewRouter from './routes/cartContentView.js'
+import createLoginViewRouter from './routes/loginView.js'
+import createRegisterViewRouter from './routes/registerView.js'
+import createLogoutRouter from './routes/logoutRouter.js'
+
 import { CUSTOM_ERROR_TYPES, CustomError  } from '../../misc/customError.js'
-import { HTTP_STATUS_CODES } from './statusCodes.js'
+import { HTTP_STATUS_CODES } from './public/js/statusCodes.js'
 import {getDirectory} from '../../misc/utils.js'
 import createWebSocketServer from './wsServer.js'
+import session from 'express-session'
+import getSessionSecret from '../../misc/session.js'
 
 class ECOMMServer {
     constructor(managers, config, logger) {
@@ -50,6 +59,10 @@ class ECOMMServer {
         const PATH_ROOT = ""
         const PATH_RT_PRODUCTS = "realtimeproducts"
         const PATH_CHAT = "chat"
+        const PATH_SESSION = 'session'
+        const PATH_LOGIN = 'login'
+        const PATH_REGISTER = 'register'
+        const PATH_LOGOUT = 'logout'
     
         const buildRoute = (arr) => "/" + arr.join("/")
     
@@ -57,6 +70,10 @@ class ECOMMServer {
             // API
             { route : buildRoute([PATH_API, PATH_PRODUCTS]), router: createProductsRouter(this.managers.productManager, this.logger), name: 'productManagerRouter'},
             { route : buildRoute([PATH_API, PATH_CARTS]), router: createCartRouter(this.managers.cartManager, this.logger), name : 'cartManagerRouter'},
+            { route : buildRoute([PATH_API, PATH_SESSION, PATH_LOGIN]), router: createLoginRouter(this.managers.usersManager, this.logger), name : 'LoginRouter'},
+            { route : buildRoute([PATH_API, PATH_SESSION, PATH_REGISTER]), router: createRegisterRouter(this.managers.usersManager, this.logger), name : 'RegisterRouter'},
+            { route : buildRoute([PATH_API, PATH_SESSION, PATH_LOGOUT]), router: createLogoutRouter(this.logger), name : 'LogoutRouter'},
+            
             // VIEWS
             { route : buildRoute([PATH_HOME]), router: createHomeRouter(this.managers.productManager, this.logger), name : 'HomeRouter'},
             { route : buildRoute([PATH_ROOT]), router: createIndexRouter(this.logger), name : 'IndexRouter'},
@@ -64,8 +81,8 @@ class ECOMMServer {
             { route : buildRoute([PATH_CHAT]), router: createChatRouter(this.logger), name : 'Chat'},
             { route : buildRoute([PATH_PRODUCTS]), router: createProductsViewRouter(this.managers.productManager, this.logger), name : 'ProductsView'},
             { route : buildRoute([PATH_CARTS]), router: createCartProductsInfoViewRouter(this.managers.cartManager, this.logger), name : 'CartProductsView'},
-            
-            
+            { route : buildRoute([PATH_LOGIN]), router: createLoginViewRouter(this.logger), name : 'LoginView'},
+            { route : buildRoute([PATH_REGISTER]), router: createRegisterViewRouter(this.logger), name : 'RegisterView'},
         ]
         this.logger.Info('setRoutes', `Registering ${routes.length} routes:`)
         routes.forEach(e => {
@@ -87,11 +104,42 @@ class ECOMMServer {
         // Middleware parseo JSON en body
         this.app.use(express.json())
     
+        // Sesion
+        this.app.use(session({
+            secret : getSessionSecret()
+        }))
+
         // Middleware : Logeo
         this.app.use((req, res, next) => {
-            this.logger.Info('ECOMHttpServer', `Request with parameters remote=${req.ip},method=${req.method}, url=${req.url}`)
+            this.logger.Info('Middleware | Request Logger', `Request with parameters remote=${req.ip},method=${req.method}, url=${req.url}`)
             next()
+        })        
+
+        // Autorizacion
+        let noLoginRequiredPaths = ['/login', '/register', '/api/session/login', '/api/session/register']
+        this.app.use((req, res, next) => {
+            let user  = req.session?.user
+            if(!user) {
+                if(noLoginRequiredPaths.includes(req.url))
+                    next()
+                else {
+                    this.logger.Info('Middleware | Authorization', `User is not logged in, redirecting to /login`)
+                    return res.redirect('/login')
+                }
+            }
+            else {
+                if(req.url === '/login') {
+                    this.logger.Info('Middleware | Authorization', `User is already logged in, redirecting to /products`)
+                    return res.redirect('/products')
+                }
+                else {
+                    this.logger.Info('Middleware | Authorization', `User is logged in`)
+                    next()
+                }
+            }
         })
+
+
     
         return this
     }   

@@ -2,7 +2,7 @@ import { CustomError, CUSTOM_ERROR_TYPES } from "../../misc/customError.js";
 import { SM_ERROR_CODES } from "../../adapters/storage/fs/StorageManagerFile.js";
 import { APP_EVENTS } from "../../adapters/restAPI/public/js/events.js";
 import adjustQueryParams from "./ProductManagerQueryParams.js";
-import { MAX_TITLE_SIZE, MAX_DESCRIPTION_SIZE} from '../../misc/limits.js'
+import { MAX_TITLE_SIZE, MAX_DESCRIPTION_SIZE} from '../../misc/constants.js'
 
 
 

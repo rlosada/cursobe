@@ -1,4 +1,4 @@
-import { MAX_DESCRIPTION_SIZE, MAX_TITLE_SIZE } from "../../../../../misc/limits.js"
+import { MAX_DESCRIPTION_SIZE, MAX_TITLE_SIZE } from "../../../../../misc/constants.js"
 import { Schema } from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2'
 
