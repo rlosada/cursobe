@@ -3,7 +3,7 @@ import logger from './misc/logger/LoggerInstance.js'
 import createECOMHttpServer from './adapters/restAPI/httpServer.js'
 import getCartManager from './application/cartManager/CartManagerInstance.js'
 import eventManager from './application/eventManager/eventManagerInstance.js'
-import connectToMongoDb from './adapters/storage/db/mongo/mongo.js'
+import {connectToMongoDb} from './adapters/storage/db/mongo/mongo.js'
 import getChatManager from './adapters/restAPI/public/js/chatManager/chatManagerInstance.js'
 import getUsersManager from './application/users/UserManagerInstance.js'
 

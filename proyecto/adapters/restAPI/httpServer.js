@@ -23,6 +23,10 @@ import createWebSocketServer from './wsServer.js'
 import session from 'express-session'
 import getSessionSecret from '../../misc/session.js'
 
+import { getMongoUrl } from '../storage/db/mongo/mongo.js'
+
+import MongoStore from 'connect-mongo'
+
 class ECOMMServer {
     constructor(managers, config, logger) {
         this.logger = logger
@@ -106,7 +110,13 @@ class ECOMMServer {
     
         // Sesion
         this.app.use(session({
-            secret : getSessionSecret()
+            secret : getSessionSecret(),
+            store : MongoStore.create({
+                mongoUrl : getMongoUrl(),
+                ttl : 500
+            }),
+            resave : false,
+            saveUnitialized : false
         }))
 
         // Middleware : Logeo

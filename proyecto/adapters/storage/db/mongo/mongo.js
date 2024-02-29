@@ -2,10 +2,16 @@ import mongoose from "mongoose";
 import configuration from "../../../../misc/configuration/configuration.js";
 import logger from '../../../../misc/logger/LoggerInstance.js'
 
-async function connectToMongoDb() {
+export function getMongoUrl() {
     let { user, pass, dbname, server } = configuration.db
 
-    const uri = `mongodb+srv://${user}:${pass}@${server}/?retryWrites=true&w=majority`;
+    return `mongodb+srv://${user}:${pass}@${server}/?retryWrites=true&w=majority`;
+}
+
+export async function connectToMongoDb() {
+    let { user, pass, dbname, server } = configuration.db
+
+    const uri = getMongoUrl()
     
     const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true , dbName : dbname} };
 
@@ -36,4 +42,3 @@ async function connectToMongoDb() {
 }
 
 
-export default connectToMongoDb
