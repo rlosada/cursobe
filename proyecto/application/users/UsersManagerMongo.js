@@ -1,5 +1,7 @@
 import { CustomError, CUSTOM_ERROR_TYPES } from "../../misc/customError.js";
+import { checkHash, hashString } from "../../misc/utils.js";
 import { validateUser } from "./UserValidator.js";
+
 
 // Codigos de error
 export const CM_ERROR_CODES = Object.freeze({
@@ -64,7 +66,7 @@ export default class UsersManager {
         let user 
         
         try {
-            user = await collection.findOne({ email , password }).lean()
+            user = await collection.findOne({ email }).lean()
         } catch(err) {
             logger.Error(`${this.constructor.name}|getUserByEmailAndPass`, `Fail to get user from database, error=${err}`)
             throw createError(CM_ERROR_CODES.ERROR_USER_INTERNAL_ERROR)
@@ -73,6 +75,13 @@ export default class UsersManager {
         if(user === null) {
             logger.Error(`${this.constructor.name}|getUserByEmailAndPass`, `No results found`)
             return null
+        }
+
+        // Verificar password
+        let rc = await checkHash(password, user.password) 
+        if(!rc) {
+            logger.Error(`${this.constructor.name}|getUserByEmailAndPass`, `Invlaid password`)
+            return null  
         }
 
         if(!(validateUser(user)))
@@ -85,7 +94,14 @@ export default class UsersManager {
         const collection = this.#model
         const logger = this.#logger
 
-        if(!validateUser(user)) {
+        let {password, ...rest} = user
+
+        // Hashear el password
+        let hashedPassword = await hashString(password)
+
+        user = {...rest, password : hashedPassword}
+
+       if(!validateUser(user)) {
             logger.Error(`${this.constructor.name}|addUser`, `Validation of user object failed, rejecting request`)      
             return false       
         }

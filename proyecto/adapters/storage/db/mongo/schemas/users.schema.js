@@ -37,29 +37,29 @@ usersSchema.plugin(mongoosePaginate)
 
 // Cargar hooks en el schema
 
-usersSchema.pre('findOne', function(next) {
+// usersSchema.pre('findOne', function(next) {
     
-    logger.Info('Mongoose | findOne | pre-hook', `Input query: ${JSON.stringify(this.getQuery())}`)
+//     logger.Info('Mongoose | findOne | pre-hook', `Input query: ${JSON.stringify(this.getQuery())}`)
 
-    // Si la query viene con password, hashearlo primero
-    let { password } = this.getQuery()
+//     // Si la query viene con password, hashearlo primero
+//     let { password } = this.getQuery()
 
-    if(password) 
-        this.where('password', getHash(password).toUpperCase())
+//     if(password) 
+//         this.where('password', getHash(password).toUpperCase())
 
-    logger.Info('Mongoose | findOne | pre-hook', `Output query: ${JSON.stringify(this.getQuery())}`)
+//     logger.Info('Mongoose | findOne | pre-hook', `Output query: ${JSON.stringify(this.getQuery())}`)
 
-    // Ejecutar el proximo middleware
-    next()
-})
+//     // Ejecutar el proximo middleware
+//     next()
+// })
 
-usersSchema.pre('save', function(next) {
+// usersSchema.pre('save', function(next) {
     
-    if(this.password) 
-        this.password = getHash(this.password).toUpperCase()
+//     if(this.password) 
+//         this.password = getHash(this.password).toUpperCase()
     
-    // Ejecutar el proximo middleware
-    next()
-})
+//     // Ejecutar el proximo middleware
+//     next()
+// })
 
 export const usersCollectionName = 'Users'

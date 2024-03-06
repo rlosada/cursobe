@@ -2,6 +2,9 @@ import { fileURLToPath }  from 'url'
 import { dirname } from 'path'
 import crypto from 'node:crypto'
 import { USER_TYPES } from './constants.js'
+import bcrypt from 'bcrypt'
+import configuration from './configuration/configuration.js'
+import { DEFAUT_SALT_ROUNDS } from './constants.js'
 
 /**
  * Recupera el path completo del directorio donde reside el modulo
@@ -60,4 +63,16 @@ export function getHash(value) {
     return crypto.createHash(HASH_ALGO)
             .update(value)
             .digest(OUTPUT_FORMAT)
+}
+
+
+export async function hashString(str) {
+    let saltRounds = configuration.hashing.saltRounds || DEFAUT_SALT_ROUNDS
+    let result = await bcrypt.hash(str, saltRounds)
+    return result
+}
+
+export async function checkHash(plain, hashed) {
+    let rc = await bcrypt.compare(plain, hashed)
+    return rc
 }

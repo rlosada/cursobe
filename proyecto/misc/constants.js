@@ -19,3 +19,5 @@ export const USER_TYPES = {
     SIMPLE :'USUARIO' 
 }
 
+
+export const DEFAUT_SALT_ROUNDS = 10
