@@ -37,7 +37,7 @@ function processSubmitEvent(ev) {
 
     logger.Info("Login Form ", `Sending login request to server`);
 
-    axios.post(SUBMIT_URL, { email, password })
+    axios.post(SUBMIT_URL, { username: email, password })
         .then(loginSuccess)
         .catch(loginError);
 }

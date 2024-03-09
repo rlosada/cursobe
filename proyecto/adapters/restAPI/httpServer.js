@@ -27,6 +27,10 @@ import { getMongoUrl } from '../storage/db/mongo/mongo.js'
 
 import MongoStore from 'connect-mongo'
 
+import passport from 'passport'
+
+import initPassport from './passport/passport.js'
+
 class ECOMMServer {
     constructor(managers, config, logger) {
         this.logger = logger
@@ -100,7 +104,7 @@ class ECOMMServer {
     /**
      * Inicializa los middlewares
      */
-    setMiddlewares() {
+    async setMiddlewares() {
         const publicDirectory = `${getDirectory(import.meta.url)}/public`    
         // 
         this.app.use(express.static(publicDirectory))
@@ -115,9 +119,12 @@ class ECOMMServer {
                 mongoUrl : getMongoUrl(),
                 ttl : 500
             }),
-            resave : false,
-            saveUnitialized : false
+            resave : false
         }))
+
+        // Passport
+        initPassport(passport)
+        this.app.use(passport.authenticate('session'))
 
         // Middleware : Logeo
         this.app.use((req, res, next) => {
@@ -125,10 +132,15 @@ class ECOMMServer {
             next()
         })        
 
+        this.app.use((req, res, next) => {
+            this.logger.Info('Middleware | Passport Debug', `req.cookies=${JSON.stringify(req.cookies)}, req.session=${JSON.stringify(req.session)}, req.user=${JSON.stringify(req.user)}`)
+            next()
+        })
+
         // Autorizacion
         let noLoginRequiredPaths = ['/login', '/register', '/api/session/login', '/api/session/register']
         this.app.use((req, res, next) => {
-            let user  = req.session?.user
+            let user  = req.user
             if(!user) {
                 if(noLoginRequiredPaths.includes(req.url))
                     next()
@@ -200,13 +212,16 @@ class ECOMMServer {
  * 
  * 
  */
-const createECOMHttpServer = (managers, lg) => {
-    
-    return new  ECOMMServer(managers, globalConfiguration.httpServer, lg)
-                    .setMiddlewares()
-                    .setRoutes()
-                    .registerViewEngine()
-                    .setErrorHandler()
+async function createECOMHttpServer(managers, lg) {
+    const ecomserver = new  ECOMMServer(managers, globalConfiguration.httpServer, lg)
+
+    await ecomserver.setMiddlewares()
+
+    ecomserver.setRoutes()
+              .registerViewEngine()
+              .setErrorHandler()
+
+    return ecomserver
 }
 
 export default createECOMHttpServer

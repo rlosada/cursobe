@@ -80,7 +80,7 @@ export default class UsersManager {
         // Verificar password
         let rc = await checkHash(password, user.password) 
         if(!rc) {
-            logger.Error(`${this.constructor.name}|getUserByEmailAndPass`, `Invlaid password`)
+            logger.Error(`${this.constructor.name}|getUserByEmailAndPass`, `Invalid password`)
             return null  
         }
 

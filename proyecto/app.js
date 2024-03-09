@@ -28,7 +28,7 @@ async function run() {
 
     ChatApp.start()
 
-    const eCOMServer = createECOMHttpServer(managers, logger)
+    const eCOMServer = await createECOMHttpServer(managers, logger)
     eCOMServer.startServer()
 }
 

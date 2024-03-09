@@ -18,7 +18,7 @@ function processPostLogout(req, res, next) {
         if(err) 
             logger.Error('processPostLogout', `Fail to destroy session, error=${JSON.stringify(err)}`)
         else 
-            logger.Error('processPostLogout', `Session destroyed`)
+            logger.Info('processPostLogout', `Session destroyed`)
         
         res.redirect('/login')
         return

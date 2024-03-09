@@ -21,3 +21,5 @@ export const USER_TYPES = {
 
 
 export const DEFAUT_SALT_ROUNDS = 10
+
+export const PASSPORT_LOCAL_STRATEGY = 'local'
