@@ -11,6 +11,7 @@ export const MESSAGE_MAX_SIZE = 256     // Maxima cantidad de caracteres que pue
 export const MAX_USER_FIRST_NAME = 64
 export const MAX_USER_LAST_NAME = 64
 export const MAX_USER_EMAIL = 64
+export const MAX_EXTERNAL_ID_LENGTH = 256
 
 
 // Tipos de usuarios permitidos
@@ -23,3 +24,12 @@ export const USER_TYPES = {
 export const DEFAUT_SALT_ROUNDS = 10
 
 export const PASSPORT_LOCAL_STRATEGY = 'local'
+export const PASSPORT_GITHUB_STRATEGY = 'github'
+
+// Fuentes externas permitidas
+export const EXTERNAL_SOURCES = {
+    GITHUB : 'GITHUB'
+}
+
+// Caracter utilizado para separar la fuente externa del identificador de usuario
+export const EXTERNAL_ID_SEPARATOR = '.'

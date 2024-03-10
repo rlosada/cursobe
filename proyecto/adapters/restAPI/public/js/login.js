@@ -6,7 +6,7 @@ const LOGIN_FORM_ID = 'LoginForm'           // ID del formulario en el HTML
 const EMAIL_ID = "email_id"                 // ID del input que contiene el email en el formulario HTML
 const PASSWORD_ID = "password_id"           // ID del input que contiene el password en el formulario HTML
 const SUBMIT_EVENT = "submit"               // Evento que se dispara cuando se presiona el boton de submit en el formulario HTML
-const SUBMIT_URL = "api/session/login"      // Ruta a la cual enviar el POST
+const SUBMIT_URL = "/api/session/login"      // Ruta a la cual enviar el POST
 const ACTION_SUCESS_REDIRECT = '/products'   // Ruta que se carga si el login es correcto
 
 let logger 

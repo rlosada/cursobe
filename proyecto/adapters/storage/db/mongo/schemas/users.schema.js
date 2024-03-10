@@ -20,7 +20,9 @@ export const usersSchema = new Schema(
                         }
         },
         age :        { type : Number, required : true,   min : 0, max : 120              },
-        password :   { type : String, required : true,   maxLength : MAX_USER_LAST_NAME  },
+        // El password no es requerido ya que los usuarios logeados a traves de otro mecanismo (ej:github) 
+        // no poseen password
+        password :   { type : String, maxLength : MAX_USER_LAST_NAME  },
         type :       { 
                         type : String, 
                         required : true, 
@@ -28,6 +30,11 @@ export const usersSchema = new Schema(
                             validator: validateUserType,
                             message: 'Invalid user type'       
                         }
+        },
+        // Si este valor existe, entonces el usuario se identifico desde otra plataforma
+        // no uso user/pass
+        externalID : {
+            type : String 
         }
     }
 )

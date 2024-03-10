@@ -1,13 +1,26 @@
 import {initPassportLocal} from "./passport-local.js";
+import {initPassportGitHub} from "./passport-github.js"
 import { initPassportCommon } from "./passport-common.js";
 
 async function initPassport(passport) {
+    let rc
     // Inicializacion de cosas comunes independientes del
     // mecanimo de authentication 
-    await initPassportCommon(passport)
+    rc = await initPassportCommon(passport)
+    if(!rc)
+        return false
     // Inicializacion de cosas exclusivas del mecanismo de 
     // authentication local
-    await initPassportLocal(passport)
+    rc = await initPassportLocal(passport)
+    if(!rc)
+        return false
+    // Inicializacion de cosas exclusivas del mecanismo de 
+    // authentication a traves de github (OAuth 2.0)
+    rc = await initPassportGitHub(passport)
+    if(!rc)
+        return false
+
+    return true
 }
 
 export default initPassport

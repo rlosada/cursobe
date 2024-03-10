@@ -1,24 +1,16 @@
 import { Router } from 'express'
 import { HTTP_STATUS_CODES } from '../public/js/statusCodes.js'
 import { USER_TYPES } from '../../../misc/constants.js'
+import { buildUserLocal } from '../../../application/users/userBuilder.js'
 
 let logger 
-let userManager     
+let userManager    
 
 function processPostRegister(req, res, next) {
 
     let {email, firstName, lastName, age, password} = req.body
 
-    age = Number.parseInt(age)
-
-    let user = {
-        email,
-        firstName,
-        lastName,
-        age,
-        password,
-        type : USER_TYPES.SIMPLE.toUpperCase() // Lo usuario que se registran nunca son ADMINISTRADOR
-    }
+    let user = buildUserLocal(email, firstName, lastName, Number.parseInt(age), password)
 
     logger.Info('processPostRegister', `Processing register request from client using ${JSON.stringify(user)}`)
 

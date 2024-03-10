@@ -1,12 +1,12 @@
 import { Router } from 'express'
 
-const VIEW_TEMPLATE = 'login'  // Nombre del template ubicado en viewengine/views/${VIEW_TEMPLATE}.handlebars
+const VIEW_TEMPLATE = 'loginLocal'  // Nombre del template ubicado en viewengine/views/${VIEW_TEMPLATE}.handlebars
 const HTML_TITLE = 'Login'          // Nombre asignado al tab en el navegador
 
-const createLoginViewRouter = (lg) => {
+const createLoginLocalViewRouter = (lg) => {
     const router = Router()
     router.use((req, res, next) => {
-        lg.Info('Router:LoginView', `Processing request`)
+        lg.Info('Router:LoginLocalView', `Processing request`)
         next()
     })
 
@@ -15,4 +15,4 @@ const createLoginViewRouter = (lg) => {
     return router    
 }
 
-export default createLoginViewRouter
+export default createLoginLocalViewRouter

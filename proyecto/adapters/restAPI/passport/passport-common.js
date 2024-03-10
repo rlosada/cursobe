@@ -27,5 +27,5 @@ function deserializeUser(sessionInfo, cb) {
 export async function initPassportCommon(passport) {
     logger.Info('initPassportCommon', `Registering deserializer`)
     passport.deserializeUser(deserializeUser)    
-    return
+    return true
 }

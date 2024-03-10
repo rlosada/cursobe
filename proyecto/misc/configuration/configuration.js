@@ -1,8 +1,8 @@
 export default {
     dataSource : "db",
     db : {
-        user : "usermongo",
-        pass : "mongo938",
+        user : "USER",
+        pass : "PASSWORD",
         dbname : "ecommerce",
         server : "cluster0.wtewrgc.mongodb.net"
     },
@@ -31,5 +31,10 @@ export default {
     },
     hashing : {
         saltRounds : 10
+    },
+    githubPassportLogin : {
+        clientid: "GITHUB_CLIENT_ID",
+        clientsecret: "GITHUB_SECRET",
+        callback: "GITHUB_REGISTERED_CALLBACK"
     }
 }

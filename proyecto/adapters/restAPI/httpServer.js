@@ -1,6 +1,6 @@
 import globalConfiguration from '../../misc/configuration/configuration.js'
 import express from 'express'
-import createLoginRouter from './routes/loginRouter.js'
+import createLoginRouter from './routes/loginLocalRouter.js'
 import createProductsRouter from './routes/productsRouter.js'
 import createCartRouter from './routes/cartsRouter.js'
 import registerViewEngine from './viewengine/viewengine.js'
@@ -9,6 +9,9 @@ import createIndexRouter from './routes/indexRouter.js'
 import createChatRouter from './routes/chat.js.js'
 import createRealTimeProductsRouter from './routes/realTimeProductsRouter.js'
 import createRegisterRouter from './routes/registerRouter.js'
+import createLoginLocalViewRouter from './routes/loginLocalView .js'
+import createLoginGitHubRouter from './routes/loginGitHubRouter.js'
+import createLoginGitHubCbckRouter from './routes/loginGitHubCbckRouter.js'
 
 import createProductsViewRouter from './routes/productsView.js'
 import createCartProductsInfoViewRouter from './routes/cartContentView.js'
@@ -71,6 +74,9 @@ class ECOMMServer {
         const PATH_LOGIN = 'login'
         const PATH_REGISTER = 'register'
         const PATH_LOGOUT = 'logout'
+        const PATH_LOCAL = 'local'
+        const PATH_GITHUB = 'github'
+        const PATH_CALLBACK = 'callback'
     
         const buildRoute = (arr) => "/" + arr.join("/")
     
@@ -90,7 +96,13 @@ class ECOMMServer {
             { route : buildRoute([PATH_PRODUCTS]), router: createProductsViewRouter(this.managers.productManager, this.logger), name : 'ProductsView'},
             { route : buildRoute([PATH_CARTS]), router: createCartProductsInfoViewRouter(this.managers.cartManager, this.logger), name : 'CartProductsView'},
             { route : buildRoute([PATH_LOGIN]), router: createLoginViewRouter(this.logger), name : 'LoginView'},
+            { route : buildRoute([PATH_LOGIN, PATH_LOCAL]), router: createLoginLocalViewRouter(this.logger), name : 'LoginLocalView'},
             { route : buildRoute([PATH_REGISTER]), router: createRegisterViewRouter(this.logger), name : 'RegisterView'},
+
+            { route : buildRoute([PATH_LOGIN, PATH_GITHUB]), router: createLoginGitHubRouter(this.logger), name : 'LoginLocalGitHub'},
+            { route : buildRoute([PATH_LOGIN, PATH_GITHUB, PATH_CALLBACK]), router: createLoginGitHubCbckRouter(this.logger), name : 'LoginLocalGitHubCbck'},
+            
+            
         ]
         this.logger.Info('setRoutes', `Registering ${routes.length} routes:`)
         routes.forEach(e => {
@@ -123,7 +135,12 @@ class ECOMMServer {
         }))
 
         // Passport
-        initPassport(passport)
+        let rc = await initPassport(passport)
+        if(!rc) {
+            this.logger.Info('Middleware | Passport', `Passport initialization failed`)
+            throw new Error('Passport middleware initialization failed')
+        }
+
         this.app.use(passport.authenticate('session'))
 
         // Middleware : Logeo
@@ -138,11 +155,12 @@ class ECOMMServer {
         })
 
         // Autorizacion
-        let noLoginRequiredPaths = ['/login', '/register', '/api/session/login', '/api/session/register']
+        let noLoginRequiredPaths = ['/login', '/register', '/api/session/login', '/api/session/register', '/login/local', '/login/github', '/login/github/callback']
         this.app.use((req, res, next) => {
             let user  = req.user
             if(!user) {
-                if(noLoginRequiredPaths.includes(req.url))
+                let url = req.url.split('?')[0]
+                if(noLoginRequiredPaths.includes(url))
                     next()
                 else {
                     this.logger.Info('Middleware | Authorization', `User is not logged in, redirecting to /login`)
@@ -215,8 +233,8 @@ class ECOMMServer {
 async function createECOMHttpServer(managers, lg) {
     const ecomserver = new  ECOMMServer(managers, globalConfiguration.httpServer, lg)
 
-    await ecomserver.setMiddlewares()
-
+    let rc = await ecomserver.setMiddlewares()
+    
     ecomserver.setRoutes()
               .registerViewEngine()
               .setErrorHandler()

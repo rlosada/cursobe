@@ -1,8 +1,7 @@
 import { Strategy as LocalStrategy } from 'passport-local'
 import logger from '../../../misc/logger/LoggerInstance.js'
 import getUsersManager from '../../../application/users/UserManagerInstance.js'
-import passport from 'passport'
-import { USER_TYPES } from '../../../misc/constants.js'
+import { buildSessionInfo } from '../../../application/users/sessionUserBuilder.js'
 
 let um = await getUsersManager()
 
@@ -19,12 +18,12 @@ let um = await getUsersManager()
 async function verify(username, password, cb) {
     logger.Info('verify', `LocalStrategy | username:${username}, password:${password}`)   
     
-    let user = await um.getUserByEmailAndPass(username, password)
-    if(user) {
+    let dbuser = await um.getUserByEmailAndPass(username, password)
+    if(dbuser) {
         logger.Info('verify', `LocalStrategy | User verification SUCCESS`)   
         // Passport va a depositar el contenido de sessioninfo el storage encargado de
         // administrar las sessiones    
-        cb(null, buildSessionInfo(user))
+        cb(null, buildSessionInfo(dbuser))
     }
     else { 
         logger.Error('verify', `LocalStrategy | User verification FAILED`)   
@@ -32,20 +31,7 @@ async function verify(username, password, cb) {
     }
 }
 
-function buildSessionInfo(dbUser) {
-    logger.Info('buildSessionInfo', `Data object received is ${JSON.stringify(dbUser)}`)  
 
-    let sessionInfo = {
-        uid : dbUser._id,
-        firstName : dbUser.firstName,
-        lastName : dbUser.lastName,
-        isAdmin : (dbUser.type === USER_TYPES.ADMIN)
-    }   
-    
-    logger.Info('buildSessionInfo', `Session information build => ${JSON.stringify(sessionInfo)}`) 
-
-    return sessionInfo
-}
 
 // /**
 //  * 
@@ -64,9 +50,10 @@ function buildSessionInfo(dbUser) {
 //     cb(null, sessionInfo)
 // }
 
-export function initPassportLocal(passport) {
-    logger.Info('initPassportLocal', `Registering LocalStrategy`)  
+export async function initPassportLocal(passport) {
+    logger.Info('initPassportLocal', `Registering Local strategy`)  
     passport.use(new LocalStrategy(verify))
+    return true
 }
 
 

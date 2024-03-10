@@ -1,6 +1,6 @@
 import { CustomError, CUSTOM_ERROR_TYPES } from "../../misc/customError.js";
 import { checkHash, hashString } from "../../misc/utils.js";
-import { validateUser } from "./UserValidator.js";
+import { validateUser, validateExternalUser } from "./UserValidator.js";
 
 
 // Codigos de error
@@ -52,6 +52,29 @@ export default class UsersManager {
         this.#logger = logger
         this.#logger?.Info('Constructor', `New UsersManager created`)
     }
+
+    async getUserByExternaId(externalID) {
+        const collection = this.#model
+        const logger = this.#logger
+        let user 
+        
+        try {
+            user = await collection.findOne({ externalID }).lean()
+        } catch(err) {
+            logger.Error(`${this.constructor.name}|getUserByExternaId`, `Fail to get user from database, error=${err}`)
+            throw createError(CM_ERROR_CODES.ERROR_USER_INTERNAL_ERROR)
+        }
+
+        if(user === null) {
+            logger.Error(`${this.constructor.name}|getUserByExternaId`, `No results found`)
+            return null
+        }
+
+        if(!(validateExternalUser(user)))
+            return null
+
+        return user
+    }    
 
     /**
      * Recupera el objeto que representa al usuario
@@ -117,4 +140,25 @@ export default class UsersManager {
 
         return true
     }
+
+    async addExternaUser(user) {
+        const collection = this.#model
+        const logger = this.#logger
+
+       if(!validateExternalUser(user)) {
+            logger.Error(`${this.constructor.name}|addExternaUser`, `Validation of user object failed, rejecting request`)      
+            return false       
+        }
+
+        logger.Info(`${this.constructor.name}|addExternaUser`, `Trying to add new user ${JSON.stringify(user)}`)   
+
+        try {
+            await collection.create(user)   
+        } catch(error) {
+            logger.Error(`${this.constructor.name}|addExternaUser`, `Creation of user failed, error=${JSON.stringify(error)}`)   
+            return false 
+        }
+
+        return true
+    }    
 }    
