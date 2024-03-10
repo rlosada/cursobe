@@ -8,8 +8,7 @@ En la carpeta ./misc/configuration esta el archivo configuration.js que contiene
 * Nombre del archivo para almacenar los carritos. (Solo usado en caso de que el modo de almacenamiento sea 'fs')
 * Parametros de acceso a la base de datos (Solo mongo esta soportado)
 * Puerto de escucha del server HTTP.
-
-
+* Se agregan el objeto githubPassportLogin que posse la configuracion para logearse contra github usando OAuth 2.0
 
 # Lanzar aplicacion
 Para lanzar ejecutar **npm start**
