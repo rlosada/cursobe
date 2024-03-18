@@ -14,9 +14,7 @@ function deserializeUser(sessionInfo, cb) {
 
     logger.Info('deserializeUser', `Deserializing user`)  
 
-    // No se realizan cambios
-    // Deserializar en el siguiente ciclo del event-loop
-    process.nextTick(() => cb(null, sessionInfo))
+    process.nextTick(() => cb(null, sessionInfo  ))
 }
 
 /**

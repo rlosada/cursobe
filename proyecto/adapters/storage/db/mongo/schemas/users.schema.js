@@ -4,11 +4,12 @@ import mongoosePaginate from 'mongoose-paginate-v2'
 import { validateEmail, validateUserType } from "../../../../../misc/utils.js"
 import { getHash } from "../../../../../misc/utils.js"
 import logger from './../../../../../misc/logger/LoggerInstance.js'
+import { cartsCollectionName} from './carts.schema.js'
 
 export const usersSchema = new Schema( 
     {
-        firstName :  { type : String, required : true, maxLength : MAX_USER_FIRST_NAME },
-        lastName :   { type : String, required : true, maxLength : MAX_USER_LAST_NAME  },
+        first_name :  { type : String, required : true, maxLength : MAX_USER_FIRST_NAME },
+        last_name :   { type : String, required : true, maxLength : MAX_USER_LAST_NAME  },
         email : {
                         type: String,
                         unique:true,
@@ -23,7 +24,7 @@ export const usersSchema = new Schema(
         // El password no es requerido ya que los usuarios logeados a traves de otro mecanismo (ej:github) 
         // no poseen password
         password :   { type : String, maxLength : MAX_USER_LAST_NAME  },
-        type :       { 
+        role :       { 
                         type : String, 
                         required : true, 
                         validate : {
@@ -35,7 +36,13 @@ export const usersSchema = new Schema(
         // no uso user/pass
         externalID : {
             type : String 
-        }
+        },
+        // cart id
+        cid : { 
+            type : Schema.Types.ObjectId, 
+            //required : true, 
+            ref : cartsCollectionName
+        },        
     }
 )
 

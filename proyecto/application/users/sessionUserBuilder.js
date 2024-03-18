@@ -12,8 +12,8 @@ export function buildSessionInfo(dbUser) {
 
     let sessionInfo = {
         uid : dbUser._id,
-        firstName : dbUser.firstName,
-        lastName : dbUser.lastName,
+        firstName : dbUser.first_name,
+        lastName : dbUser.last_name,
         isAdmin : (dbUser.type === USER_TYPES.ADMIN)
     }   
     

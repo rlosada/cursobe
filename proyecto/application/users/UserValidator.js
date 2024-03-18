@@ -19,12 +19,12 @@ export function validateUser(user) {
         },
         {
             func : (firstName) => (typeof firstName === "string") && (firstName.length <= MAX_USER_FIRST_NAME),
-            field: "firstName",
+            field: "first_name",
             ret_when_fail : false
         },
         {
             func : (lastName) => (typeof lastName === "string") && (lastName.length <= MAX_USER_LAST_NAME),
-            field: "lastName",
+            field: "last_name",
             ret_when_fail : false
         },
         {
@@ -37,7 +37,7 @@ export function validateUser(user) {
                     let values = Object.values(USER_TYPES)
                     return (typeof type === "string" && values.includes(type.toUpperCase())) 
                 },
-            field: "type",
+            field: "role",
             ret_when_fail : false
         },  
     ]

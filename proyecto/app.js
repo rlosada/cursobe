@@ -6,8 +6,13 @@ import eventManager from './application/eventManager/eventManagerInstance.js'
 import {connectToMongoDb} from './adapters/storage/db/mongo/mongo.js'
 import getChatManager from './adapters/restAPI/public/js/chatManager/chatManagerInstance.js'
 import getUsersManager from './application/users/UserManagerInstance.js'
+import {verifyConfiguration} from './misc/utils.js'
 
 async function init() {
+    // Verifica que los parametros de configuracion son adecuados
+    if(!verifyConfiguration())
+        return false
+
     let rc = await connectToMongoDb()
     return rc
 }

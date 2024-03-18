@@ -1,6 +1,6 @@
 import globalConfiguration from '../../misc/configuration/configuration.js'
 import express from 'express'
-import createLoginRouter from './routes/loginLocalRouter.js'
+import createLoginRouter from './routes/login/loginLocalRouter.js'
 import createProductsRouter from './routes/productsRouter.js'
 import createCartRouter from './routes/cartsRouter.js'
 import registerViewEngine from './viewengine/viewengine.js'
@@ -8,16 +8,16 @@ import createHomeRouter from './routes/homeRouter.js'
 import createIndexRouter from './routes/indexRouter.js'
 import createChatRouter from './routes/chat.js.js'
 import createRealTimeProductsRouter from './routes/realTimeProductsRouter.js'
-import createRegisterRouter from './routes/registerRouter.js'
-import createLoginLocalViewRouter from './routes/loginLocalView .js'
-import createLoginGitHubRouter from './routes/loginGitHubRouter.js'
-import createLoginGitHubCbckRouter from './routes/loginGitHubCbckRouter.js'
+import createRegisterRouter from './routes/register/registerRouter.js'
+import createLoginLocalViewRouter from './routes/login/loginLocalView .js'
+import createLoginGitHubRouter from './routes/login/loginGitHubRouter.js'
+import createLoginGitHubCbckRouter from './routes/login/loginGitHubCbckRouter.js'
 
 import createProductsViewRouter from './routes/productsView.js'
 import createCartProductsInfoViewRouter from './routes/cartContentView.js'
-import createLoginViewRouter from './routes/loginView.js'
-import createRegisterViewRouter from './routes/registerView.js'
-import createLogoutRouter from './routes/logoutRouter.js'
+import createLoginViewRouter from './routes/login/loginView.js'
+import createRegisterViewRouter from './routes/register/registerView.js'
+import createLogoutRouter from './routes/logout/logoutRouter.js'
 
 import { CUSTOM_ERROR_TYPES, CustomError  } from '../../misc/customError.js'
 import { HTTP_STATUS_CODES } from './public/js/statusCodes.js'
@@ -33,6 +33,8 @@ import MongoStore from 'connect-mongo'
 import passport from 'passport'
 
 import initPassport from './passport/passport.js'
+import cookieParser from 'cookie-parser'
+import configuration from '../../misc/configuration/configuration.js'
 
 class ECOMMServer {
     constructor(managers, config, logger) {
@@ -123,6 +125,10 @@ class ECOMMServer {
     
         // Middleware parseo JSON en body
         this.app.use(express.json())
+
+        // Cookie parser
+        let {cookieSecret} = configuration
+        this.app.use(cookieParser(cookieSecret))
     
         // Sesion
         this.app.use(session({

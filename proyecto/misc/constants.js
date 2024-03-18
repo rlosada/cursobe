@@ -33,3 +33,18 @@ export const EXTERNAL_SOURCES = {
 
 // Caracter utilizado para separar la fuente externa del identificador de usuario
 export const EXTERNAL_ID_SEPARATOR = '.'
+
+
+// Modos de login
+export const LOGIN_MODES = {
+    JWT : 'JWT', 
+    SESSION : 'SESSION'
+}
+
+export const JWT_DETAULT_EXPIRATION_SECONDS = 3600
+export const COOKIE_DEFAULT_EXPIRTAION_SECONDS = JWT_DETAULT_EXPIRATION_SECONDS
+
+export const MAX_SECRETS_LENGTH = 64
+
+// Nombre de la cookie que transporta el JWT
+export const JWT_COOKIE_NAME = 'JWT'

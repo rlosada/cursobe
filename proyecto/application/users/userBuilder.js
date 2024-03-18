@@ -4,32 +4,41 @@ import { USER_TYPES } from "../../misc/constants.js"
 /**
  * Fabrica un objeto usuario que fue registrado localmente
  * 
- * @param {*} email         
- * @param {*} firstName 
- * @param {*} lastName 
- * @param {*} age 
- * @param {*} password 
- * @param {*} type 
- * @returns 
+ * @param {*} email         Direccion de correo electronico         
+ * @param {*} firstName     Nombre
+ * @param {*} lastName      Apellido
+ * @param {*} age           Edad
+ * @param {*} password      passoword
+ * 
+ * @returns usuario
  */
 export const buildUserLocal = (email, firstName, lastName, age, password) => {
     return {
         email,
-        firstName,
-        lastName,
+        first_name: firstName,
+        last_name : lastName,
         age,
         password,
-        type : USER_TYPES.SIMPLE.toUpperCase() 
+        role : USER_TYPES.SIMPLE.toUpperCase() 
     }
 }
 
+
+/**
+ * Fabrica un objeto usuario que fue registrado en otro sistema
+ * 
+ * @param {*} externalID    Identificador del usuario en el sistema externo
+ * @param {*} username      Nombre de usuario
+ * 
+ * @returns usuario
+ */
 export const buildUserGitHub = (externalID, username) => {
     return {
         email : `${externalID}@dummy.mail.com`,
-        firstName : username,
-        lastName : username,
+        first_name : username,
+        last_name : username,
         age : 0,
-        type : USER_TYPES.SIMPLE.toUpperCase() ,
+        role : USER_TYPES.SIMPLE.toUpperCase() ,
         externalID
     }
 }

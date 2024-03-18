@@ -1,9 +1,9 @@
-import mongoose, { Schema } from "mongoose";
-import {productCollectionName} from './products.schema.js'
+import { Schema } from "mongoose";
+import { productCollectionName } from './products.schema.js'
 
 const productInfoSchema = new Schema({
     pid : { 
-        type : mongoose.Schema.Types.ObjectId, 
+        type : Schema.Types.ObjectId, 
         required : true, 
         ref : productCollectionName
     },
