@@ -1,5 +1,5 @@
 export default {
-    loginMode : 'SESSION',
+    loginMode : 'JWT',
     jwtSecret : 'JWT_SECRET',
     jwtExpirationSeconds : 3600,
     cookieSecret : 'COOKIE_SECRET',
@@ -7,7 +7,7 @@ export default {
     db : {
         user : "USER",
         pass : "PASS",
-        dbname : "DBNAME",
+        dbname : "ecommerce",
         server : "cluster0.wtewrgc.mongodb.net"
     },
     fs : { 
@@ -37,8 +37,8 @@ export default {
         saltRounds : 10
     },
     githubPassportLogin : {
-        clientid: "GITHUB_CLIENT_ID",
-        clientsecret: "GITHUB_SECRET",
-        callback: "GITHUB_CALLBACK"
+        clientid: "CLIENT_ID",
+        clientsecret: "CLIENT_SECRET",
+        callback: "CALLBACK"
     }
 }
