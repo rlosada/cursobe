@@ -19,4 +19,9 @@ Para lanzar ejecutar **npm start**
 * El chat se levanta sobre el puerto 8081.
 * La falla en la grabacion de los mensajes en la base de datos se ignora, solo se logea, pero el mensaje se envia a el/los destinatario/s aunque no pueda grabarse en la base.
 
-
+# Login con JWT o SESSION
+Ahora en el configuration.json se incluyen unas keys adicionales para configurar el modo de login:
+* key=loginMode, valores posibles = SESSION o JWT. Indica que modo de login usar.
+* key=jwtSecret. Es un string que se usa como el secret para hashear el JWT.
+* key=jwtExpirationSeconds. Son los segundos luego de los cuales el JWT y COOKIE que lo transporta expiran.
+* key=cookieSecret. Es un string que se usa como el secret para hashear la COOKIE.
