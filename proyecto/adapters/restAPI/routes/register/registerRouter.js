@@ -57,10 +57,11 @@ const createRegisterRouter = (um, lg) => {
     userManager = um
     logger = lg
     const router = Router()
-    router.use((req, res, next) => {
-        lg.Info('Router:RegisterView', `Processing request`)
-        next()
+    router.use('/', (req, res, next) => {
+            lg.Info('Router:RegisterView', `Processing request`)
+            next()
     })
+
     // GET
     router.post('/', processPostRegister)  
 

@@ -44,11 +44,11 @@ const processDeleteProduct = (req, res, next) => {
 }
 
 
-const createProductsRouter = (pm, lg) => {
+const createProductsRouter = (pm, lg, auth) => {
     productManager = pm
     logger = lg
     const router = Router()
-    router.use((req, res, next) => {
+    router.use(auth, (req, res, next) => {
         logger.Info('Router:Products', `Request with parameters remote=${req.ip},method=${req.method}, url=${req.url}`)
         next()
     })    

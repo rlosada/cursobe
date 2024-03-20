@@ -12,6 +12,7 @@ import createRegisterRouter from './routes/register/registerRouter.js'
 import createLoginLocalViewRouter from './routes/login/loginLocalView .js'
 import createLoginGitHubRouter from './routes/login/loginGitHubRouter.js'
 import createLoginGitHubCbckRouter from './routes/login/loginGitHubCbckRouter.js'
+import createCurrentRouter from './routes/currentRouter.js'
 
 import createProductsViewRouter from './routes/productsView.js'
 import createCartProductsInfoViewRouter from './routes/cartContentView.js'
@@ -35,6 +36,8 @@ import passport from 'passport'
 import initPassport from './passport/passport.js'
 import cookieParser from 'cookie-parser'
 import configuration from '../../misc/configuration/configuration.js'
+import { LOGIN_MODES } from '../../misc/constants.js'
+import auth from './passport/auth.js'
 
 class ECOMMServer {
     constructor(managers, config, logger) {
@@ -79,30 +82,40 @@ class ECOMMServer {
         const PATH_LOCAL = 'local'
         const PATH_GITHUB = 'github'
         const PATH_CALLBACK = 'callback'
+        const PATH_CURRENT = 'current'
     
         const buildRoute = (arr) => "/" + arr.join("/")
+
+        const authAPI = () => auth(true)
+        const authView = () => auth(false)
     
         const routes = [
             // API
-            { route : buildRoute([PATH_API, PATH_PRODUCTS]), router: createProductsRouter(this.managers.productManager, this.logger), name: 'productManagerRouter'},
-            { route : buildRoute([PATH_API, PATH_CARTS]), router: createCartRouter(this.managers.cartManager, this.logger), name : 'cartManagerRouter'},
+            { route : buildRoute([PATH_API, PATH_PRODUCTS]), router: createProductsRouter(this.managers.productManager, this.logger, authAPI()), name: 'productManagerRouter'},
+            { route : buildRoute([PATH_API, PATH_CARTS]), router: createCartRouter(this.managers.cartManager, this.logger, authAPI()), name : 'cartManagerRouter'},
+            { route : buildRoute([PATH_API, PATH_SESSION, PATH_LOGOUT]), router: createLogoutRouter(this.logger, authAPI()), name : 'LogoutRouter'},
+            { route : buildRoute([PATH_API, PATH_SESSION, PATH_CURRENT]), router: createCurrentRouter(this.logger, authAPI()), name : 'CurrentRouter'},
+            
+
             { route : buildRoute([PATH_API, PATH_SESSION, PATH_LOGIN]), router: createLoginRouter(this.managers.usersManager, this.logger), name : 'LoginRouter'},
             { route : buildRoute([PATH_API, PATH_SESSION, PATH_REGISTER]), router: createRegisterRouter(this.managers.usersManager, this.logger), name : 'RegisterRouter'},
-            { route : buildRoute([PATH_API, PATH_SESSION, PATH_LOGOUT]), router: createLogoutRouter(this.logger), name : 'LogoutRouter'},
+            
             
             // VIEWS
-            { route : buildRoute([PATH_HOME]), router: createHomeRouter(this.managers.productManager, this.logger), name : 'HomeRouter'},
-            { route : buildRoute([PATH_ROOT]), router: createIndexRouter(this.logger), name : 'IndexRouter'},
-            { route : buildRoute([PATH_RT_PRODUCTS]), router: createRealTimeProductsRouter(this.logger), name : 'RealTimeProducts'},
-            { route : buildRoute([PATH_CHAT]), router: createChatRouter(this.logger), name : 'Chat'},
-            { route : buildRoute([PATH_PRODUCTS]), router: createProductsViewRouter(this.managers.productManager, this.logger), name : 'ProductsView'},
-            { route : buildRoute([PATH_CARTS]), router: createCartProductsInfoViewRouter(this.managers.cartManager, this.logger), name : 'CartProductsView'},
             { route : buildRoute([PATH_LOGIN]), router: createLoginViewRouter(this.logger), name : 'LoginView'},
             { route : buildRoute([PATH_LOGIN, PATH_LOCAL]), router: createLoginLocalViewRouter(this.logger), name : 'LoginLocalView'},
             { route : buildRoute([PATH_REGISTER]), router: createRegisterViewRouter(this.logger), name : 'RegisterView'},
 
             { route : buildRoute([PATH_LOGIN, PATH_GITHUB]), router: createLoginGitHubRouter(this.logger), name : 'LoginLocalGitHub'},
             { route : buildRoute([PATH_LOGIN, PATH_GITHUB, PATH_CALLBACK]), router: createLoginGitHubCbckRouter(this.logger), name : 'LoginLocalGitHubCbck'},
+
+            { route : buildRoute([PATH_HOME]), router: createHomeRouter(this.managers.productManager, this.logger, authView()), name : 'HomeRouter'},
+            { route : buildRoute([PATH_ROOT]), router: createIndexRouter(this.logger, authView()), name : 'IndexRouter'},
+            { route : buildRoute([PATH_RT_PRODUCTS]), router: createRealTimeProductsRouter(this.logger, authView()), name : 'RealTimeProducts'},
+            { route : buildRoute([PATH_CHAT]), router: createChatRouter(this.logger, authView()), name : 'Chat'},
+            { route : buildRoute([PATH_PRODUCTS]), router: createProductsViewRouter(this.managers.productManager, this.logger, authView()), name : 'ProductsView'},
+            { route : buildRoute([PATH_CARTS]), router: createCartProductsInfoViewRouter(this.managers.cartManager, this.logger, authView()), name : 'CartProductsView'},
+
             
             
         ]
@@ -140,6 +153,7 @@ class ECOMMServer {
             resave : false
         }))
 
+
         // Passport
         let rc = await initPassport(passport)
         if(!rc) {
@@ -147,7 +161,11 @@ class ECOMMServer {
             throw new Error('Passport middleware initialization failed')
         }
 
-        this.app.use(passport.authenticate('session'))
+        // Determinar que modo de login fue elegido 
+        let { loginMode } = configuration
+        if(loginMode == LOGIN_MODES.SESSION) 
+            this.app.use(passport.authenticate('session'))
+        
 
         // Middleware : Logeo
         this.app.use((req, res, next) => {
@@ -160,33 +178,6 @@ class ECOMMServer {
             next()
         })
 
-        // Autorizacion
-        let noLoginRequiredPaths = ['/login', '/register', '/api/session/login', '/api/session/register', '/login/local', '/login/github', '/login/github/callback']
-        this.app.use((req, res, next) => {
-            let user  = req.user
-            if(!user) {
-                let url = req.url.split('?')[0]
-                if(noLoginRequiredPaths.includes(url))
-                    next()
-                else {
-                    this.logger.Info('Middleware | Authorization', `User is not logged in, redirecting to /login`)
-                    return res.redirect('/login')
-                }
-            }
-            else {
-                if(req.url === '/login') {
-                    this.logger.Info('Middleware | Authorization', `User is already logged in, redirecting to /products`)
-                    return res.redirect('/products')
-                }
-                else {
-                    this.logger.Info('Middleware | Authorization', `User is logged in`)
-                    next()
-                }
-            }
-        })
-
-
-    
         return this
     }   
 

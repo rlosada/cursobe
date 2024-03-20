@@ -1,9 +1,9 @@
 import { Router } from 'express'
 
 
-const createIndexRouter = (lg) => {
+const createIndexRouter = (lg, auth) => {
     const router = Router()
-    router.use((req, res, next) => {
+    router.use(auth, (req, res, next) => {
         lg.Info('Router:Index', `Request with parameters remote=${req.ip},method=${req.method}, url=${req.url}`)
         next()
     })

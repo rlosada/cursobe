@@ -10,15 +10,14 @@ function processGetCartProductsInfoView(req, res, next) {
                             res.render('cartcontent', data)
         })
         .catch((err) => { 
-            console.log(err)
             next()
         })
 }
 
-const createCartProductsInfoViewRouter = (cm, lg) => {
+const createCartProductsInfoViewRouter = (cm, lg, auth) => {
     cartManager = cm
     const router = Router()
-    router.use((req, res, next) => {
+    router.use(auth, (req, res, next) => {
         lg.Info('Router:CartProductsView', `Request with parameters remote=${req.ip},method=${req.method}, url=${req.url}`)
         next()
     })

@@ -1,34 +1,29 @@
 import { Router } from 'express'
-import { HTTP_STATUS_CODES } from '../../public/js/statusCodes.js'
+import logoutJWT from './modes/logoutJWT.js'
+import logoutSession from './modes/logoutSession.js'
+import { LOGIN_MODES } from '../../../../misc/constants.js'
+import configuration from '../../../../misc/configuration/configuration.js'
 
 let logger 
 
 
+
 function processPostLogout(req, res, next) {
-    
+
     logger.Info('processPostLogout', `Processing logout request from client`)
 
-    if(!req.session) {
-        logger.Info('processPostLogout', `client is not logged in, ignoring request`)
-        res.redirect('/login')
-        return
-    }
-
-    req.session.destroy((err) => {
-        if(err) 
-            logger.Error('processPostLogout', `Fail to destroy session, error=${JSON.stringify(err)}`)
-        else 
-            logger.Info('processPostLogout', `Session destroyed`)
-        
-        res.redirect('/login')
-        return
-    })
+    // Determinar que modo de login fue elegido 
+    let { loginMode } = configuration
+    if(loginMode == LOGIN_MODES.SESSION) 
+        logoutSession(req, res)
+    else if(loginMode === LOGIN_MODES.JWT)
+        logoutJWT(res)    
 }
 
-const createLogoutRouter = (lg) => {
+const createLogoutRouter = (lg, auth) => {
     logger = lg
     const router = Router()
-    router.use((req, res, next) => {
+    router.use(auth, (req, res, next) => {
         lg.Info('Router:Logout', `Processing request`)
         next()
     })

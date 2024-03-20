@@ -14,11 +14,11 @@ function processGetProductsView(req, res, next) {
         .catch(next)
 }
 
-const createProductsViewRouter = (pm, lg) => {
+const createProductsViewRouter = (pm, lg, auth) => {
     productManager = pm
     logger = lg
     const router = Router()
-    router.use((req, res, next) => {
+    router.use(auth, (req, res, next) => {
         lg.Info('Router:ProductsView', `Request with parameters remote=${req.ip},method=${req.method}, url=${req.url}`)
         next()
     })

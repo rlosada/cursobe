@@ -1,13 +1,13 @@
 import { Router } from 'express'
 import { HTTP_STATUS_CODES } from '../../public/js/statusCodes.js'
-import { JWT_DETAULT_EXPIRATION_SECONDS, LOGIN_MODES } from '../../../../misc/constants.js'
+import { LOGIN_MODES } from '../../../../misc/constants.js'
 import passport from 'passport'
 import { PASSPORT_LOCAL_STRATEGY, JWT_COOKIE_NAME } from '../../../../misc/constants.js'
 import { CustomError } from '../../../../misc/customError.js'
 import { CUSTOM_ERROR_TYPES } from '../../../../misc/customError.js'
 import configuration from '../../../../misc/configuration/configuration.js'
 import useJWT from './modes/loginJWT.js'
-
+import useSession from './modes/loginSession.js'
 
 let logger 
 let userManager    
@@ -60,14 +60,5 @@ const createLoginRouter = (um, lg) => {
 }
 
 
-/**
- * Inicializa el objeto session que luego buscara passport para inicializar
- * req.user
-  * @param {user} user 
- */
-function useSession(req, user) {
-    logger.Info('useSession', `Loading user to req.session.passport`)
-    req.session.passport = { user : user }
-}
 
 export default createLoginRouter

@@ -14,10 +14,10 @@ function processGetProductsView(req, res, next) {
     
 }
 
-const createHomeRouter = (pm, lg) => {
+const createHomeRouter = (pm, lg, auth) => {
     productManager = pm
     const router = Router()
-    router.use((req, res, next) => {
+    router.use(auth, (req, res, next) => {
         lg.Info('Router:Views', `Request with parameters remote=${req.ip},method=${req.method}, url=${req.url}`)
         next()
     })

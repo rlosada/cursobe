@@ -25,5 +25,10 @@ function deserializeUser(sessionInfo, cb) {
 export async function initPassportCommon(passport) {
     logger.Info('initPassportCommon', `Registering deserializer`)
     passport.deserializeUser(deserializeUser)    
+    passport.serializeUser((user, done) => {
+        logger.Info('serializeUser', `Serialize ${JSON.stringify(user)}`)
+        done(null, user)
+
+    })
     return true
 }

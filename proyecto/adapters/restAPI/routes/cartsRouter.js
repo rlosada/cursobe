@@ -53,11 +53,11 @@ const processUpdateCart = (req, res, next) => {
             .catch(next)        
 }
 
-const createCartRouter = (cm, lg) => {
+const createCartRouter = (cm, lg, auth) => {
     cartManager = cm
     logger = lg
     const router = Router()
-    router.use((req, res, next) => {
+    router.use(auth, (req, res, next) => {
         logger.Info('Router:Carts', `Request with parameters remote=${req.ip},method=${req.method}, url=${req.url}`)
         next()
     })
