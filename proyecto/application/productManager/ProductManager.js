@@ -2,7 +2,7 @@ import { CustomError, CUSTOM_ERROR_TYPES } from "../../misc/customError.js";
 import { SM_ERROR_CODES } from "../../adapters/storage/fs/StorageManagerFile.js";
 import { APP_EVENTS } from "../../adapters/restAPI/public/js/events.js";
 import adjustQueryParams from "./ProductManagerQueryParams.js";
-import { MAX_TITLE_SIZE, MAX_DESCRIPTION_SIZE} from '../../misc/constants.js'
+import  CONSTANTS  from '../../misc/constants.js'
 
 
 
@@ -120,8 +120,6 @@ export default class ProductManager {
         return product
     }
 
-
-
     async getProducts(queryParams) {
 
         let products = await this.#sm.getElements(adjustQueryParams(queryParams))
@@ -164,12 +162,12 @@ export default class ProductManager {
     #checkProduct(product, input) {
         let checks = [
             {
-                func : (title) => (typeof title === "string") && (title.length <= MAX_TITLE_SIZE),  // funcion de verificacion a ejecutar
+                func : (title) => (typeof title === "string") && (title.length <= CONSTANTS.MAX_TITLE_SIZE),  // funcion de verificacion a ejecutar
                 field: "title",                                                                     // atributo del objeto sobre el cual aplicar la funcion de verificacion
                 ret_when_fail : PM_ERROR_CODES.ERROR_TITLE                                             // resultado a devolver si la funcion de verificacion devuelva "false"
             },
             {
-                func : (desc) => (typeof desc === "string") && (desc.length <= MAX_DESCRIPTION_SIZE),
+                func : (desc) => (typeof desc === "string") && (desc.length <= CONSTANTS.MAX_DESCRIPTION_SIZE),
                 field: "description",
                 ret_when_fail : PM_ERROR_CODES.ERROR_DESCRIPTION
             },

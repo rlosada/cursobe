@@ -7,20 +7,18 @@ const EXPRESS_VIEW_ENGINE_ID = 'view engine'
 let logger 
 let hbs
 
-const registerHandelbarsViewEngine = (app, config, lg) => {
+const registerHandlebarsViewEngine = (app, config, lg) => {
     logger = lg
     let {viewsFullPath} = config
 
-    hbs = create({
-        helpers
-    })
+    hbs = create({ helpers })
 
     app.engine(ENGINE, hbs.engine)
     app.set(EXPRESS_VIEWS_ID, viewsFullPath)
     app.set(EXPRESS_VIEW_ENGINE_ID, ENGINE)
 
-    logger.Info('registerHandelbarsViewEngine', `Handelrbars view engine registered. Using views folder ${viewsFullPath}`)
+    logger.Info('registerHandlebarsViewEngine', `Handlebars view engine registered. Using views folder ${viewsFullPath}`)
     return app
 }
 
-export default registerHandelbarsViewEngine
+export default registerHandlebarsViewEngine

@@ -1,8 +1,10 @@
 import { ChatManager } from "./chatManager.js";
-import configuration from "../../../../../misc/configuration/configuration.js";
+import { getConfiguration } from "../../../../../misc/configuration/configuration.js";
 import logger from '../../../../../misc/logger/LoggerInstance.js'
 import { ChannelServer } from "./channel/ChannelServer.js";
 import {ChatStorageMongo} from './storage/chatStorageMongo.js'
+
+const configuration = getConfiguration()
 
 let chatManager = null
 

@@ -1,10 +1,10 @@
-import { MAX_USER_FIRST_NAME, MAX_USER_LAST_NAME, MAX_USER_EMAIL } from "../../../../../misc/constants.js"
+import CONSTANTS from "../../../../../misc/constants.js"
 import { Schema } from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2'
 import { validateEmail, validateUserType } from "../../../../../misc/utils.js"
-import { getHash } from "../../../../../misc/utils.js"
-import logger from './../../../../../misc/logger/LoggerInstance.js'
 import { cartsCollectionName} from './carts.schema.js'
+
+let { MAX_USER_FIRST_NAME, MAX_USER_LAST_NAME, MAX_USER_EMAIL } = CONSTANTS
 
 export const usersSchema = new Schema( 
     {

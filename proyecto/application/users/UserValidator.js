@@ -1,7 +1,8 @@
 import logger from '../../misc/logger/LoggerInstance.js'
-import { MAX_USER_EMAIL, MAX_USER_FIRST_NAME, MAX_USER_LAST_NAME, MAX_EXTERNAL_ID_LENGTH, EXTERNAL_ID_SEPARATOR , EXTERNAL_SOURCES} from '../../misc/constants.js'
-import { USER_TYPES } from '../../misc/constants.js'
+import CONSTANTS from '../../misc/constants.js'
 import { validateExternalId } from './externalID.js'
+
+const { MAX_USER_EMAIL, MAX_USER_FIRST_NAME, MAX_USER_LAST_NAME, USER_TYPES} = CONSTANTS
 
 /**
  * Verifica si el objeto recibido es un usuario valido

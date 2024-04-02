@@ -23,15 +23,12 @@ const createWebSocketServer = (server, lg, evManager) => {
 }
 
 function procProductListResponse(products) {
-    logger.Info('WsServer|procProductListResponse', `Processing event ${APP_EVENTS.EV_PROD_LIST_RESP}`)
+    logger.Info('WsServer|procProductListResponse', `Processing event ${APP_EVENTS.EV_PROD_LIST_RESP}, pending_sockets ${productListPending.length}`)
     
-    // Enviar a todos los remotos pendientes el evento
-    productListPending.forEach(socket => {
-        let ev = { type : APP_EVENTS.EV_PROD_LIST_RESP, data : products}
-        socket.emit(WS_SOCKET_EVENTS.EV_DATA_IND, ev)
-    })
+    let ev = { type : APP_EVENTS.EV_PROD_LIST_RESP, data : products}
+
+    productListPending.forEach(socket => socket.emit(WS_SOCKET_EVENTS.EV_DATA_IND, ev))
     
-    // Limpiar la lista de remotos pendientes
     productListPending = []
 }
 

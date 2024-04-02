@@ -1,6 +1,8 @@
-import { MAX_DESCRIPTION_SIZE, MAX_TITLE_SIZE } from "../../../../../misc/constants.js"
+import CONSTANTS from "../../../../../misc/constants.js"
 import { Schema } from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2'
+
+let { MAX_DESCRIPTION_SIZE, MAX_TITLE_SIZE } = CONSTANTS
 
 export const productsSchema = new Schema( 
     {

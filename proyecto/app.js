@@ -1,26 +1,25 @@
-import productManager from './application/productManager/ProductManagerInstance.js'
+import getProductManager from './application/productManager/ProductManagerInstance.js'
 import logger from './misc/logger/LoggerInstance.js'
 import createECOMHttpServer from './adapters/restAPI/httpServer.js'
 import getCartManager from './application/cartManager/CartManagerInstance.js'
-import eventManager from './application/eventManager/eventManagerInstance.js'
+import getEventManager from './misc/eventManager/eventManagerInstance.js'
 import {connectToMongoDb} from './adapters/storage/db/mongo/mongo.js'
 import getChatManager from './adapters/restAPI/public/js/chatManager/chatManagerInstance.js'
 import getUsersManager from './application/users/UserManagerInstance.js'
-import {verifyConfiguration} from './misc/utils.js'
+
+
 
 async function init() {
-    // Verifica que los parametros de configuracion son adecuados
-    if(!verifyConfiguration())
-        return false
-
     let rc = await connectToMongoDb()
     return rc
 }
 
 async function run() {
 
-    let cartManager = await getCartManager()
-    let usersManager = await getUsersManager()
+    const cartManager = await getCartManager()
+    const usersManager = await getUsersManager()
+    const productManager = await getProductManager()
+    const eventManager = await getEventManager()
 
     const managers = {
         productManager : productManager,

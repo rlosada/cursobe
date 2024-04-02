@@ -1,5 +1,6 @@
-import { EXTERNAL_ID_SEPARATOR } from "../../misc/constants.js"
-import { EXTERNAL_SOURCES, MAX_EXTERNAL_ID_LENGTH } from "../../misc/constants.js"
+import CONSTANTS from "../../misc/constants.js"
+
+const { EXTERNAL_SOURCES, MAX_EXTERNAL_ID_LENGTH, EXTERNAL_ID_SEPARATOR } = CONSTANTS
 
 /**
  * Verificar que el identificador de usuario

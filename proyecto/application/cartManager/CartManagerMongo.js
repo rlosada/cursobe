@@ -110,13 +110,10 @@ export default class CartManager {
         // Limpiar el arreglo
         cart.productsInfo = []
 
-        console.log(typeof productsInfo)
-
         // Cargar los nuevos valores
         productsInfo.productsInfo.forEach( v => cart.productsInfo.push( v ))
         
         await collection.updateOne({_id : cid}, cart)
-
 
         return
     }
@@ -164,7 +161,7 @@ export default class CartManager {
         }
     }
 
-    async cartEmpty(cid, pid) {
+    async cartEmpty(cid) {
         const collection = this.#model
         const logger = this.#logger
        

@@ -1,6 +1,8 @@
 
 import logger from '../../misc/logger/LoggerInstance.js'
-import { USER_TYPES } from '../../misc/constants.js'
+import CONSTANTS from '../../misc/constants.js'
+
+const { USER_TYPES } = CONSTANTS
 
 /**
  * Construye el objeto que se almacena en la req.session.user

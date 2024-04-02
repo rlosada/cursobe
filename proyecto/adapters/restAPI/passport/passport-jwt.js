@@ -1,7 +1,10 @@
 import logger from '../../../misc/logger/LoggerInstance.js'
 import { Strategy } from 'passport-jwt'
-import { JWT_COOKIE_NAME } from '../../../misc/constants.js'
-import configuration from '../../../misc/configuration/configuration.js'
+import CONSTANTS from '../../../misc/constants.js'
+import { getConfiguration } from '../../../misc/configuration/configuration.js'
+
+const { JWT_COOKIE_NAME } = CONSTANTS
+const configuration = getConfiguration()
 
 export async function initPassportJWT(passport) { 
     logger.Info('initPassportJWT', `Registering JWT strategy`)  

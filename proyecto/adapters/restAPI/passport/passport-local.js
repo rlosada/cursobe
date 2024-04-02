@@ -1,9 +1,8 @@
 import { Strategy as LocalStrategy } from 'passport-local'
 import logger from '../../../misc/logger/LoggerInstance.js'
-import getUsersManager from '../../../application/users/UserManagerInstance.js'
 import { buildSessionInfo } from '../../../application/users/sessionUserBuilder.js'
+import UserRepository from '../../../respositories/user.repository.js'
 
-let um = await getUsersManager()
 
 /**
  * 
@@ -18,7 +17,7 @@ let um = await getUsersManager()
 async function verify(username, password, cb) {
     logger.Info('verify', `LocalStrategy | username:${username}, password:${password}`)   
     
-    let dbuser = await um.getUserByEmailAndPass(username, password)
+    let dbuser = await UserRepository.getByEmailAndPass(username, password)
     if(dbuser) {
         logger.Info('verify', `LocalStrategy | User verification SUCCESS`)   
         // Passport va a depositar el contenido de sessioninfo el storage encargado de
@@ -30,25 +29,6 @@ async function verify(username, password, cb) {
         cb(null, false, { message: 'User not found or password is invalid' })
     }
 }
-
-
-
-// /**
-//  * 
-//  * @param {*} dbUser Objeto devuelto por la base 
-//  * @param {*} cb Funcion de callback
-//  * 
-//  * Recibe la informacion de usuario recuperada en el verify() y la almacena en storage de sesiones
-//  * a traves de la funcion de callback sera almacenado en req.user
-//  */
-// export function serializeUser(dbUser, cb) {
-//     logger.Info('serializeUser', `Logged user session info : ${JSON.stringify(dbUser)}`)  
-
-//     let sessionInfo =  buildSessionInfo(dbUser)
-
-//     // Serializar en el siguiente ciclo del event-loop
-//     cb(null, sessionInfo)
-// }
 
 export async function initPassportLocal(passport) {
     logger.Info('initPassportLocal', `Registering Local strategy`)  

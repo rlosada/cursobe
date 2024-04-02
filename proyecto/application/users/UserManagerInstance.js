@@ -1,7 +1,8 @@
 import logger from '../../misc/logger/LoggerInstance.js'
-import configuration from '../../misc/configuration/configuration.js'
+import  { getConfiguration } from '../../misc/configuration/configuration.js'
 import getUsersMongoModel from '../../adapters/storage/db/mongo/models/users.model.js'
 
+let configuration = getConfiguration()
 let usersManager = null
 
 async function getUsersManager() { 

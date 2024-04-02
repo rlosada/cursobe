@@ -10,7 +10,7 @@ export const get = () => {
     try {
         sm = new StorageManagerMongo(logger, getProductMongoModel())
     } catch (err) {
-        logger.Error('get', `Fail to build StorageManagerFile for Carts, error=${err}`)
+        logger.Error('get', `Fail to build StorageManagerMongo for Products, error=${err}`)
         return null
     }
     return sm

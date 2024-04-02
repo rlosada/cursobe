@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
-import configuration from "../../../../misc/configuration/configuration.js";
+import { getConfiguration } from "../../../../misc/configuration/configuration.js";
 import logger from '../../../../misc/logger/LoggerInstance.js'
+ 
+let configuration = getConfiguration()
 
 export function getMongoUrl() {
     let { user, pass, dbname, server } = configuration.db

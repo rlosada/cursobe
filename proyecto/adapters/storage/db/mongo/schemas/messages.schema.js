@@ -1,6 +1,8 @@
-import { MESSAGE_MAX_SIZE, MESSAGE_MIN_SIZE } from "../../../../../misc/constants.js";
+import CONSTANTS from "../../../../../misc/constants.js";
 import { Schema } from "mongoose";
 import { validateEmail } from "../../../../../misc/utils.js";
+
+const { MESSAGE_MAX_SIZE, MESSAGE_MIN_SIZE } = CONSTANTS
 
 export const messagesSchema = new Schema({
     email: {

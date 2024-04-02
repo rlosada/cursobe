@@ -1,0 +1,15 @@
+export const PATH_API = 'api'
+export const PATH_PRODUCTS = 'products'
+export const PATH_CARTS = 'carts'  
+export const PATH_HOME = 'home'  
+export const PATH_ROOT = ""
+export const PATH_RT_PRODUCTS = "realtimeproducts"
+export const PATH_CHAT = "chat"
+export const PATH_SESSION = 'session'
+export const PATH_LOGIN = 'login'
+export const PATH_REGISTER = 'register'
+export const PATH_LOGOUT = 'logout'
+export const PATH_LOCAL = 'local'
+export const PATH_GITHUB = 'github'
+export const PATH_CALLBACK = 'callback'
+export const PATH_CURRENT = 'current'

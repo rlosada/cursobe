@@ -1,31 +1,22 @@
-import globalConfiguration from '../../misc/configuration/configuration.js'
 import express from 'express'
-import createLoginRouter from './routes/login/loginLocalRouter.js'
-import createProductsRouter from './routes/productsRouter.js'
-import createCartRouter from './routes/cartsRouter.js'
+// Routers 
+import createProductsRouter from './routes/products.router.js'
+import createCartRouter from './routes/carts.router.js'
+import createSessionRouter from './routes/session.router.js'
+import createLoginRouter from './routes/login.router.js'
+import createRegisterViewRouter from './routes/register.view.router.js'
+import createRealTimeProductsRouter from './routes/rt.products.router.js'
+import createIndexRouter from './routes/index.router.js'
+import createHomeRouter from './routes/home.router.js'
+import createCartProductsInfoViewRouter from './routes/carts.view.router.js'
+import createProductsViewRouter from './routes/products.view.router.js'
+import createChatRouter from './routes/chat.view.router.js'
 import registerViewEngine from './viewengine/viewengine.js'
-import createHomeRouter from './routes/homeRouter.js'
-import createIndexRouter from './routes/indexRouter.js'
-import createChatRouter from './routes/chat.js.js'
-import createRealTimeProductsRouter from './routes/realTimeProductsRouter.js'
-import createRegisterRouter from './routes/register/registerRouter.js'
-import createLoginLocalViewRouter from './routes/login/loginLocalView .js'
-import createLoginGitHubRouter from './routes/login/loginGitHubRouter.js'
-import createLoginGitHubCbckRouter from './routes/login/loginGitHubCbckRouter.js'
-import createCurrentRouter from './routes/currentRouter.js'
-
-import createProductsViewRouter from './routes/productsView.js'
-import createCartProductsInfoViewRouter from './routes/cartContentView.js'
-import createLoginViewRouter from './routes/login/loginView.js'
-import createRegisterViewRouter from './routes/register/registerView.js'
-import createLogoutRouter from './routes/logout/logoutRouter.js'
-
 import { CUSTOM_ERROR_TYPES, CustomError  } from '../../misc/customError.js'
 import { HTTP_STATUS_CODES } from './public/js/statusCodes.js'
 import {getDirectory} from '../../misc/utils.js'
 import createWebSocketServer from './wsServer.js'
 import session from 'express-session'
-import getSessionSecret from '../../misc/session.js'
 
 import { getMongoUrl } from '../storage/db/mongo/mongo.js'
 
@@ -35,9 +26,13 @@ import passport from 'passport'
 
 import initPassport from './passport/passport.js'
 import cookieParser from 'cookie-parser'
-import configuration from '../../misc/configuration/configuration.js'
-import { LOGIN_MODES } from '../../misc/constants.js'
-import auth from './passport/auth.js'
+
+import CONSTANTS from '../../misc/constants.js'
+import { getConfiguration } from '../../misc/configuration/configuration.js'
+
+
+let { LOGIN_MODES } = CONSTANTS
+const configuration = getConfiguration()
 
 class ECOMMServer {
     constructor(managers, config, logger) {
@@ -78,45 +73,25 @@ class ECOMMServer {
         const PATH_SESSION = 'session'
         const PATH_LOGIN = 'login'
         const PATH_REGISTER = 'register'
-        const PATH_LOGOUT = 'logout'
-        const PATH_LOCAL = 'local'
-        const PATH_GITHUB = 'github'
-        const PATH_CALLBACK = 'callback'
-        const PATH_CURRENT = 'current'
     
         const buildRoute = (arr) => "/" + arr.join("/")
 
-        const authAPI = () => auth(true)
-        const authView = () => auth(false)
-    
+           
         const routes = [
             // API
-            { route : buildRoute([PATH_API, PATH_PRODUCTS]), router: createProductsRouter(this.managers.productManager, this.logger, authAPI()), name: 'productManagerRouter'},
-            { route : buildRoute([PATH_API, PATH_CARTS]), router: createCartRouter(this.managers.cartManager, this.logger, authAPI()), name : 'cartManagerRouter'},
-            { route : buildRoute([PATH_API, PATH_SESSION, PATH_LOGOUT]), router: createLogoutRouter(this.logger, authAPI()), name : 'LogoutRouter'},
-            { route : buildRoute([PATH_API, PATH_SESSION, PATH_CURRENT]), router: createCurrentRouter(this.logger, authAPI()), name : 'CurrentRouter'},
-            
-
-            { route : buildRoute([PATH_API, PATH_SESSION, PATH_LOGIN]), router: createLoginRouter(this.managers.usersManager, this.logger), name : 'LoginRouter'},
-            { route : buildRoute([PATH_API, PATH_SESSION, PATH_REGISTER]), router: createRegisterRouter(this.managers.usersManager, this.logger), name : 'RegisterRouter'},
-            
-            
+            { route : buildRoute([PATH_API, PATH_PRODUCTS]), router: createProductsRouter(), name: 'productManagerRouter'},
+            { route : buildRoute([PATH_API, PATH_CARTS]), router: createCartRouter(), name : 'cartManagerRouter'},
+            { route : buildRoute([PATH_API, PATH_SESSION]), router: createSessionRouter(), name : 'sessionManagerRouter'},
+           
             // VIEWS
-            { route : buildRoute([PATH_LOGIN]), router: createLoginViewRouter(this.logger), name : 'LoginView'},
-            { route : buildRoute([PATH_LOGIN, PATH_LOCAL]), router: createLoginLocalViewRouter(this.logger), name : 'LoginLocalView'},
-            { route : buildRoute([PATH_REGISTER]), router: createRegisterViewRouter(this.logger), name : 'RegisterView'},
-
-            { route : buildRoute([PATH_LOGIN, PATH_GITHUB]), router: createLoginGitHubRouter(this.logger), name : 'LoginLocalGitHub'},
-            { route : buildRoute([PATH_LOGIN, PATH_GITHUB, PATH_CALLBACK]), router: createLoginGitHubCbckRouter(this.logger), name : 'LoginLocalGitHubCbck'},
-
-            { route : buildRoute([PATH_HOME]), router: createHomeRouter(this.managers.productManager, this.logger, authView()), name : 'HomeRouter'},
-            { route : buildRoute([PATH_ROOT]), router: createIndexRouter(this.logger, authView()), name : 'IndexRouter'},
-            { route : buildRoute([PATH_RT_PRODUCTS]), router: createRealTimeProductsRouter(this.logger, authView()), name : 'RealTimeProducts'},
-            { route : buildRoute([PATH_CHAT]), router: createChatRouter(this.logger, authView()), name : 'Chat'},
-            { route : buildRoute([PATH_PRODUCTS]), router: createProductsViewRouter(this.managers.productManager, this.logger, authView()), name : 'ProductsView'},
-            { route : buildRoute([PATH_CARTS]), router: createCartProductsInfoViewRouter(this.managers.cartManager, this.logger, authView()), name : 'CartProductsView'},
-
-            
+            { route : buildRoute([PATH_LOGIN]), router: createLoginRouter(), name : 'LoginView'},
+            { route : buildRoute([PATH_REGISTER]), router: createRegisterViewRouter(), name : 'RegisterView'},
+            { route : buildRoute([PATH_RT_PRODUCTS]), router: createRealTimeProductsRouter(), name : 'RealTimeProducts'},
+            { route : buildRoute([PATH_ROOT]), router: createIndexRouter(), name : 'IndexRouter'},
+            { route : buildRoute([PATH_HOME]), router: createHomeRouter(), name : 'HomeRouter'},
+            { route : buildRoute([PATH_CARTS]), router: createCartProductsInfoViewRouter(), name : 'CartProductsView'},
+            { route : buildRoute([PATH_PRODUCTS]), router: createProductsViewRouter(), name : 'ProductsView'},
+            { route : buildRoute([PATH_CHAT]), router: createChatRouter(), name : 'Chat'},
             
         ]
         this.logger.Info('setRoutes', `Registering ${routes.length} routes:`)
@@ -132,10 +107,11 @@ class ECOMMServer {
      * Inicializa los middlewares
      */
     async setMiddlewares() {
-        const publicDirectory = `${getDirectory(import.meta.url)}/public`    
-        // 
-        this.app.use(express.static(publicDirectory))
-    
+
+        this.app.use((req, res, next) => {this.logger.Custom1('Middleware', `<<<< New request >>>>`); next()})
+
+        this.app.use(express.static(`${getDirectory(import.meta.url)}/public`))
+   
         // Middleware parseo JSON en body
         this.app.use(express.json())
 
@@ -144,8 +120,9 @@ class ECOMMServer {
         this.app.use(cookieParser(cookieSecret))
     
         // Sesion
+        let { sessionSecret } = configuration
         this.app.use(session({
-            secret : getSessionSecret(),
+            secret : sessionSecret,
             store : MongoStore.create({
                 mongoUrl : getMongoUrl(),
                 ttl : 500
@@ -228,7 +205,7 @@ class ECOMMServer {
  * 
  */
 async function createECOMHttpServer(managers, lg) {
-    const ecomserver = new  ECOMMServer(managers, globalConfiguration.httpServer, lg)
+    const ecomserver = new  ECOMMServer(managers, configuration.httpServer, lg)
 
     let rc = await ecomserver.setMiddlewares()
     

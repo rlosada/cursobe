@@ -1,22 +1,22 @@
-import registerHandelbarsViewEngine from './handlebars/handlerbars.js'
-import config  from '../../../misc/configuration/configuration.js'
+import { getConfiguration }  from '../../../misc/configuration/configuration.js'
 import { CustomError, CUSTOM_ERROR_TYPES } from '../../../misc/customError.js'
-import {getDirectory} from '../../../misc/utils.js'
+import { getDirectory } from '../../../misc/utils.js'
+import registerHandlebarsViewEngine from './handlebars/handlerbars.js'
 
-
+const configuration = getConfiguration()
+const viewsFullPath = `${getDirectory(import.meta.url)}/views`
 
 let logger 
-const viewsFullPath = `${getDirectory(import.meta.url)}/views`
 
 const registerViewEngine = (app, lg)  => {
 
-    const veName = config.viewengine.name
+    const veName = configuration.viewengine.name
 
     logger = lg
 
     // Tabla de view engines soportados
     const viewEngines = [
-        { name : "handlebars", registerVE : registerHandelbarsViewEngine }
+        { name : "handlebars", registerVE : registerHandlebarsViewEngine }
     ]
 
     for(const ve of  viewEngines) {

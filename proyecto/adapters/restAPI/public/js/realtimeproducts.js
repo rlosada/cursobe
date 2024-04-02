@@ -4,10 +4,13 @@ import { buildTable } from "./helpers.js"
 
 function procEventInd(event) {
     let {type, data} = event
+
     console.log(`Received event ${type}`)
 
-    if(APP_EVENTS.EV_PROD_LIST_RESP === type || APP_EVENTS.EV_PROD_LIST_UPDATE === type)
-        document.body.innerHTML = buildTable(data)
+    if(APP_EVENTS.EV_PROD_LIST_RESP === type || APP_EVENTS.EV_PROD_LIST_UPDATE === type) {
+        const products = data.payload
+        document.body.innerHTML = buildTable(products)
+    }
 }
 
 

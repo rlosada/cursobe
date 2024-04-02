@@ -1,13 +1,17 @@
-import configuration from "../../misc/configuration/configuration.js";
-import logger from "../../misc/logger/LoggerInstance.js";
+import { getConfiguration } from "../../misc/configuration/configuration.js";
 import { validatePositiveIntBase10 } from '../../misc/utils.js'
+import logger from "../../misc/logger/LoggerInstance.js";
+import CONSTANTS from "../../misc/constants.js";
 
-const DEFAULT_LIMIT = 10
-const DEFAULT_PAGE = 1
-const DEFAULT_SORT_FIELD = 'price'
-const DEFAULT_FILTERS = ['category', 'stock']
+// const DEFAULT_LIMIT = 10
+// const DEFAULT_PAGE = 1
+// const DEFAULT_SORT_FIELD = 'price'
+// const DEFAULT_FILTERS = ['category', 'stock']
 const SORT_ORDER_ASC = 'asc'
 const SORT_ORDER_DESC = 'desc'
+
+
+const configuration = getConfiguration()
 
 /**
 * Acondiciona los parametros de busqueda recibidos
@@ -16,8 +20,8 @@ export default function adjustQueryParams(queryParams) {
 
     // Valor por defecto
     let adjustedQueryParams = {
-        limit : DEFAULT_LIMIT,
-        page : DEFAULT_PAGE,
+        limit : CONSTANTS.DEFAULT_LIMIT,
+        page : CONSTANTS.DEFAULT_PAGE,
         sort : {},
         filter : {}
     }

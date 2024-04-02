@@ -1,8 +1,6 @@
-import configuration from "../../misc/configuration/configuration.js";
+import { getConfiguration } from "../../misc/configuration/configuration.js";
 import logger from '../../misc/logger/LoggerInstance.js'
-import { CustomError, CUSTOM_ERROR_TYPES } from "../../misc/customError.js";
 
-let { dataSource } =  configuration
 
 let smProducts = null
 
@@ -51,7 +49,7 @@ async  function initStorageManagers(dataSource) {
 }
 
 // Inicializa los Storage Managers segun la configuracion
-await initStorageManagers(dataSource)
+await initStorageManagers(getConfiguration().dataSource)
 
 // Exporta los StorageManagers
 export const getSmProducts = () => smProducts

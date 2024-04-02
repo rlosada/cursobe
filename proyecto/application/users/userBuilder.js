@@ -1,5 +1,7 @@
 
-import { USER_TYPES } from "../../misc/constants.js"
+import CONSTANTS from "../../misc/constants.js"
+
+const { USER_TYPES } = CONSTANTS
 
 /**
  * Fabrica un objeto usuario que fue registrado localmente
